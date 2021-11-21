@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="chatsystem" version="4">
+  <OBJECT>
+    <ID name="chatsystem" mc="Standard.Package" uid="a4392d57-058c-4bb5-947c-c4183d953a02"/>
+    <PID name="ChatSystem" mc="Standard.Project" uid="e5c4a500-c40e-4d98-acbc-44cbad95c623"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[chatsystem]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedBehavior">
+        <COMPID name="Interaction" mc="Standard.Interaction" uid="6adca568-fe07-4715-bcd5-a6bc26a55924"/>
+        <COMPID name="Interaction1" mc="Standard.Interaction" uid="267ca410-5caa-481c-bb28-4f1f02975cd6"/>
+        <COMPID name="Interaction2" mc="Standard.Interaction" uid="59162dc3-866c-4e36-b9a7-8833038528b6"/>
+        <COMPID name="Interaction3" mc="Standard.Interaction" uid="ba9da20e-a767-4ffb-9f85-3a210c01d582"/>
+      </COMP>
+      <COMP relation="OwnedElement">
+        <COMPID name="User" mc="Standard.Actor" uid="fce15dc1-d70d-4872-bdd4-866fbeccdb97"/>
+        <COMPID name="Connect To System" mc="Standard.UseCase" uid="be04e02f-2786-4258-9e98-0b8adb43553c"/>
+        <COMPID name="Communicate" mc="Standard.UseCase" uid="e87a1d8f-cae9-4fa7-aa6a-538c24c6f918"/>
+        <COMPID name="Send" mc="Standard.UseCase" uid="c55c3b6f-cb21-4b90-886e-c20cca181c05"/>
+        <COMPID name="Receive" mc="Standard.UseCase" uid="d7e7a582-a4aa-4dc9-8f12-099e97d45600"/>
+        <COMPID name="Send Text Message" mc="Standard.UseCase" uid="62d8d3d4-f041-4178-b775-7cf683f9ed74"/>
+        <COMPID name="Send File" mc="Standard.UseCase" uid="b162c6e3-3ddf-487d-91cc-53c900fa3ae0"/>
+        <COMPID name="Receive Text Message" mc="Standard.UseCase" uid="32929d3d-5848-4f70-a796-6e95e7fd7af1"/>
+        <COMPID name="Receive File" mc="Standard.UseCase" uid="c4883c77-0ef3-4771-b436-95244f858cf7"/>
+        <COMPID name="Disconnect" mc="Standard.UseCase" uid="5fe5ae14-a77b-45a5-a41f-18631e94bdf2"/>
+        <COMPID name="Select Username" mc="Standard.UseCase" uid="b8af08a7-3fec-4fae-921c-b5a786ffeddb"/>
+        <COMPID name="RemoteUser" mc="Standard.Actor" uid="86fb82ad-6637-486a-a961-03e59c722473"/>
+        <COMPID name="ConnectedRemoteUser" mc="Standard.Actor" uid="dfb98f1f-1eaa-4bd0-b3e8-383cf63c7eb2"/>
+        <COMPID name="DisconnectedRemoteUser" mc="Standard.Actor" uid="9e54fcd5-3d13-4867-abb2-a130c127f9ba"/>
+        <COMPID name="User" mc="Standard.Class" uid="fd6094a7-c366-4d10-b1fb-4e3c74d00898"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="Diagramme de cas d'utilisation chatsystem" mc="Standard.UseCaseDiagram" uid="23df3813-868a-47d7-a000-6970cb22ae43"/>
+        <COMPID name="Diagramme de classe chatsystem" mc="Standard.ClassDiagram" uid="deed6761-ec60-4b91-9277-51b2a8bff494"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="ChatSystem" version="4">
+  <OBJECT>
+    <ID name="ChatSystem" mc="Infrastructure.DiagramSet" uid="64b5d986-59fa-4eac-af81-576552fd76f6"/>
+    <PID name="ChatSystem" mc="Standard.Project" uid="e5c4a500-c40e-4d98-acbc-44cbad95c623"/>
+    <ATTRIBUTES>
+      <ATT name="Name"><![CDATA[ChatSystem]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,7 +1,5 @@
-#Thu Nov 25 19:10:42 CET 2021
-org.modelio.app.diagram.editor.OpenedDiagrams4='Sequence Disconnect' {f59bcaf2-0d20-41d7-befb-27d1798fc4be} Standard.SequenceDiagram
-org.modelio.app.diagram.editor.OpenedDiagrams3='Sequence Communicate Receive White Box' {3356e55d-625a-47df-a65f-1e3f6f4a5c55} Standard.SequenceDiagram
-org.modelio.app.diagram.editor.OpenedDiagrams2='Sequence Communicate Send White Box' {dc2198b1-504b-4a29-8ccf-882895f12a93} Standard.SequenceDiagram
-org.modelio.app.diagram.editor.OpenedDiagrams1='Sequence Connect To System White Box' {f5f585d9-2ba3-4a16-a95d-9d5b8b5c60e2} Standard.SequenceDiagram
-org.modelio.app.diagram.editor.OpenedDiagrams0='Diagramme de cas d'utilisation chatsystem' {23df3813-868a-47d7-a000-6970cb22ae43} Standard.UseCaseDiagram
+#Thu Nov 25 22:39:19 CET 2021
+org.modelio.app.diagram.editor.OpenedDiagrams2='Sequence Communicate Receive White Box' {182f388c-294e-4f12-aacb-235028694ca9} Standard.SequenceDiagram
+org.modelio.app.diagram.editor.OpenedDiagrams1='Sequence Black Box' {f2682d23-dfd3-41c2-a68f-ebe19f752df7} Standard.SequenceDiagram
+org.modelio.app.diagram.editor.OpenedDiagrams0='Sequence Communicate Send White Box' {dc2198b1-504b-4a29-8ccf-882895f12a93} Standard.SequenceDiagram
 org.modelio.app.model.search.ui.SearchHistory1=Sequence Connect

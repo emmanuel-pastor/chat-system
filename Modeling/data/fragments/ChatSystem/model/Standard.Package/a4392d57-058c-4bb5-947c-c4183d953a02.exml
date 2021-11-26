@@ -19,6 +19,7 @@
         <COMPID name="Interaction2" mc="Standard.Interaction" uid="59162dc3-866c-4e36-b9a7-8833038528b6"/>
         <COMPID name="Interaction4" mc="Standard.Interaction" uid="e7321625-d8ee-458d-b098-aa437164a956"/>
         <COMPID name="Interaction5" mc="Standard.Interaction" uid="7b574646-24b0-4c06-839d-378fa40e11f7"/>
+        <COMPID name="Interaction3" mc="Standard.Interaction" uid="3f804627-4cff-46c8-a27c-f328fdf3c34c"/>
       </COMP>
       <COMP relation="OwnedElement">
         <COMPID name="User" mc="Standard.Actor" uid="fce15dc1-d70d-4872-bdd4-866fbeccdb97"/>

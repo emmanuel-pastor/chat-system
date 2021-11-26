@@ -20,13 +20,13 @@
           <DEPENDENCIES>
             <COMP relation="SentMessage">
               <OBJECT>
-                <ID name="getUsersListRequest" mc="Standard.Message" uid="c9b1cc44-bce8-4e00-8381-21d67fe290a4"/>
+                <ID name="getConnectedUsersRequest" mc="Standard.Message" uid="c9b1cc44-bce8-4e00-8381-21d67fe290a4"/>
                 <ATTRIBUTES>
                   <ATT name="Argument"></ATT>
                   <ATT name="KindOfMessage">CompleteKind</ATT>
                   <ATT name="SortOfMessage">ASyncCall</ATT>
                   <ATT name="Sequence"><![CDATA[1]]></ATT>
-                  <ATT name="Name"><![CDATA[getUsersListRequest]]></ATT>
+                  <ATT name="Name"><![CDATA[getConnectedUsersRequest]]></ATT>
                   <ATT name="status">1970354901745664</ATT>
                 </ATTRIBUTES>
                 <DEPENDENCIES>

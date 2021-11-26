@@ -63,8 +63,6 @@
         <COMPID name="Disconnect" mc="Standard.UseCase" uid="5fe5ae14-a77b-45a5-a41f-18631e94bdf2"/>
         <COMPID name="Select Username" mc="Standard.UseCase" uid="b8af08a7-3fec-4fae-921c-b5a786ffeddb"/>
         <COMPID name="RemoteUser" mc="Standard.Actor" uid="86fb82ad-6637-486a-a961-03e59c722473"/>
-        <COMPID name="ConnectedRemoteUser" mc="Standard.Actor" uid="dfb98f1f-1eaa-4bd0-b3e8-383cf63c7eb2"/>
-        <COMPID name="DisconnectedRemoteUser" mc="Standard.Actor" uid="9e54fcd5-3d13-4867-abb2-a130c127f9ba"/>
         <COMPID name="User" mc="Standard.Class" uid="fd6094a7-c366-4d10-b1fb-4e3c74d00898"/>
         <COMPID name="ConnectionViewModel" mc="Standard.Class" uid="0ddc4e32-f45b-4b18-8105-74ac179ff0b0"/>
         <COMPID name="SelectUsernameUseCase" mc="Standard.Class" uid="3eaa4b91-4c37-4342-aca8-f114548b0adb"/>

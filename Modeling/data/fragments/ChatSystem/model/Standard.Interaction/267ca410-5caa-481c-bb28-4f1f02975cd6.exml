@@ -695,13 +695,13 @@
           <DEPENDENCIES>
             <COMP relation="SentMessage">
               <OBJECT>
-                <ID name="sendBroadcastWithResponse(usernameCheckRequest, timeout)" mc="Standard.Message" uid="b188c46b-5180-4769-a8f8-2bb17bb8b14e"/>
+                <ID name="sendBroadcastWithResponse(getUsersListRequest, timeout)" mc="Standard.Message" uid="b188c46b-5180-4769-a8f8-2bb17bb8b14e"/>
                 <ATTRIBUTES>
                   <ATT name="Argument"></ATT>
                   <ATT name="KindOfMessage">CompleteKind</ATT>
                   <ATT name="SortOfMessage">SyncCall</ATT>
                   <ATT name="Sequence"><![CDATA[10]]></ATT>
-                  <ATT name="Name"><![CDATA[sendBroadcastWithResponse(usernameCheckRequest, timeout)]]></ATT>
+                  <ATT name="Name"><![CDATA[sendBroadcastWithResponse(getUsersListRequest, timeout)]]></ATT>
                   <ATT name="status">1970354901745664</ATT>
                 </ATTRIBUTES>
                 <DEPENDENCIES>

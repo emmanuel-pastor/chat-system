@@ -1,9 +1,10 @@
-#Fri Nov 26 09:12:52 CET 2021
-org.modelio.app.diagram.editor.OpenedDiagrams5='Sequence Disconnect White Box' {f59bcaf2-0d20-41d7-befb-27d1798fc4be} Standard.SequenceDiagram
+#Fri Nov 26 09:39:11 CET 2021
 org.modelio.app.diagram.editor.OpenedDiagrams4='Diagramme de cas d'utilisation chatsystem' {23df3813-868a-47d7-a000-6970cb22ae43} Standard.UseCaseDiagram
 org.modelio.app.diagram.editor.OpenedDiagrams3='Sequence Communicate Receive File White Box' {b3174520-4664-43b5-870f-44d6f592b98c} Standard.SequenceDiagram
 org.modelio.app.diagram.editor.OpenedDiagrams2='Sequence Communicate Send File White Box' {9faa82b4-fa72-416d-be6d-7261b4a32246} Standard.SequenceDiagram
 org.modelio.app.diagram.editor.OpenedDiagrams1='Sequence Communicate Receive Text Message White Box' {182f388c-294e-4f12-aacb-235028694ca9} Standard.SequenceDiagram
 org.modelio.app.diagram.editor.OpenedDiagrams0='Sequence Communicate Send Text Message White Box' {dc2198b1-504b-4a29-8ccf-882895f12a93} Standard.SequenceDiagram
 org.modelio.app.model.search.ui.SearchHistory1=Sequence Connect
-org.modelio.app.diagram.editor.OpenedDiagrams6='Sequence Connect To System White Box' {f5f585d9-2ba3-4a16-a95d-9d5b8b5c60e2} Standard.SequenceDiagram
+org.modelio.app.diagram.editor.OpenedDiagrams7='Receive Username Validation Request' {245ae831-2c75-4e3f-8128-60dc1aed824d} Standard.SequenceDiagram
+org.modelio.app.diagram.editor.OpenedDiagrams6='Receive System Connection Message' {a971cc0c-10bf-49ee-948a-55f51e6bc98f} Standard.SequenceDiagram
+org.modelio.app.diagram.editor.OpenedDiagrams5='Sequence Connect To System White Box' {f5f585d9-2ba3-4a16-a95d-9d5b8b5c60e2} Standard.SequenceDiagram

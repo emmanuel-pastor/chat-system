@@ -60,7 +60,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -95,7 +95,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -115,7 +115,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -165,7 +165,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -255,7 +255,7 @@
           <DEPENDENCIES>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -572,10 +572,10 @@
           <DEPENDENCIES></DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="ChatSystem" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
+          <ID name="GUI" mc="Standard.Lifeline" uid="81e18dd2-1b20-44ca-9c22-9d9c6cf6d457"/>
           <ATTRIBUTES>
             <ATT name="Selector"></ATT>
-            <ATT name="Name"><![CDATA[ChatSystem]]></ATT>
+            <ATT name="Name"><![CDATA[GUI]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES></DEPENDENCIES>
@@ -633,7 +633,7 @@
         </OBJECT>
       </COMP>
       <COMP relation="Product">
-        <COMPID name="Sequence Communicate Send White Box" mc="Standard.SequenceDiagram" uid="dc2198b1-504b-4a29-8ccf-882895f12a93"/>
+        <COMPID name="Sequence Communicate Send Text Message White Box" mc="Standard.SequenceDiagram" uid="dc2198b1-504b-4a29-8ccf-882895f12a93"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

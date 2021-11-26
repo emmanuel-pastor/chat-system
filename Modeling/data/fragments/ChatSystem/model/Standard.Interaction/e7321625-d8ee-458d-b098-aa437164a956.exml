@@ -60,7 +60,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -75,7 +75,7 @@
           <DEPENDENCIES>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -95,7 +95,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -130,7 +130,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -373,7 +373,7 @@
         <OBJECT>
           <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="c7b8f790-8e30-4349-b329-74a3d5ee6dd6"/>
           <ATTRIBUTES>
-            <ATT name="LineNumber">154</ATT>
+            <ATT name="LineNumber">169</ATT>
             <ATT name="Name"></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
@@ -385,7 +385,7 @@
                   <ATT name="Argument"></ATT>
                   <ATT name="KindOfMessage">CompleteKind</ATT>
                   <ATT name="SortOfMessage">DestroyMessage</ATT>
-                  <ATT name="Sequence"><![CDATA[5]]></ATT>
+                  <ATT name="Sequence"><![CDATA[6]]></ATT>
                   <ATT name="Name"><![CDATA[destroy]]></ATT>
                   <ATT name="status">1970354901745664</ATT>
                 </ATTRIBUTES>
@@ -400,7 +400,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -408,7 +408,7 @@
         <OBJECT>
           <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="d4f41e85-c1e4-42fe-8330-9fbd704a16ff"/>
           <ATTRIBUTES>
-            <ATT name="LineNumber">183</ATT>
+            <ATT name="LineNumber">198</ATT>
             <ATT name="Name"></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
@@ -435,7 +435,7 @@
                   <ATT name="Argument"></ATT>
                   <ATT name="KindOfMessage">CompleteKind</ATT>
                   <ATT name="SortOfMessage">SyncCall</ATT>
-                  <ATT name="Sequence"><![CDATA[6]]></ATT>
+                  <ATT name="Sequence"><![CDATA[7]]></ATT>
                   <ATT name="Name"><![CDATA[goBackToConnectionPage]]></ATT>
                   <ATT name="status">1970354901745664</ATT>
                 </ATTRIBUTES>
@@ -450,7 +450,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -470,6 +470,56 @@
             </LINK>
           </DEPENDENCIES>
         </OBJECT>
+        <OBJECT>
+          <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="4ea179cc-ac97-4594-b56e-1d46a2f1d7d8"/>
+          <ATTRIBUTES>
+            <ATT name="LineNumber">130</ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="SentMessage">
+              <OBJECT>
+                <ID name="destroy" mc="Standard.Message" uid="51d00c66-70c7-4784-aa8d-69989c56a184"/>
+                <ATTRIBUTES>
+                  <ATT name="Argument"></ATT>
+                  <ATT name="KindOfMessage">CompleteKind</ATT>
+                  <ATT name="SortOfMessage">DestroyMessage</ATT>
+                  <ATT name="Sequence"><![CDATA[5]]></ATT>
+                  <ATT name="Name"><![CDATA[destroy]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <LINK relation="ReceiveEvent">
+                    <REFOBJ>
+                      <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="547a6f99-ae12-454a-9cc2-c2cdf8b788fb"/>
+                    </REFOBJ>
+                  </LINK>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <LINK relation="Covered">
+              <REFOBJ>
+                <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="547a6f99-ae12-454a-9cc2-c2cdf8b788fb"/>
+          <ATTRIBUTES>
+            <ATT name="LineNumber">130</ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Covered">
+              <REFOBJ>
+                <ID name="UdpServer" mc="Standard.Lifeline" uid="4036be86-342c-481a-8dda-d7bcef8f3a3f"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
       </COMP>
       <COMP relation="OwnedLine">
         <OBJECT>
@@ -482,10 +532,10 @@
           <DEPENDENCIES></DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="ChatSystem" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
+          <ID name="GUI" mc="Standard.Lifeline" uid="93fdd879-6afc-47b8-8130-aaf2801dd157"/>
           <ATTRIBUTES>
             <ATT name="Selector"></ATT>
-            <ATT name="Name"><![CDATA[ChatSystem]]></ATT>
+            <ATT name="Name"><![CDATA[GUI]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES></DEPENDENCIES>
@@ -526,6 +576,15 @@
           </ATTRIBUTES>
           <DEPENDENCIES></DEPENDENCIES>
         </OBJECT>
+        <OBJECT>
+          <ID name="UdpServer" mc="Standard.Lifeline" uid="4036be86-342c-481a-8dda-d7bcef8f3a3f"/>
+          <ATTRIBUTES>
+            <ATT name="Selector"></ATT>
+            <ATT name="Name"><![CDATA[UdpServer]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES></DEPENDENCIES>
+        </OBJECT>
       </COMP>
       <COMP relation="OwnedCollaboration">
         <OBJECT>
@@ -543,7 +602,7 @@
         </OBJECT>
       </COMP>
       <COMP relation="Product">
-        <COMPID name="Sequence Disconnect" mc="Standard.SequenceDiagram" uid="f59bcaf2-0d20-41d7-befb-27d1798fc4be"/>
+        <COMPID name="Sequence Disconnect White Box" mc="Standard.SequenceDiagram" uid="f59bcaf2-0d20-41d7-befb-27d1798fc4be"/>
       </COMP>
     </DEPENDENCIES>
   </OBJECT>

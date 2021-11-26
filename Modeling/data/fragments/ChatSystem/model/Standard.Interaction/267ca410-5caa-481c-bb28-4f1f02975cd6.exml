@@ -60,7 +60,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -95,7 +95,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -115,7 +115,7 @@
             </LINK>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -165,7 +165,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -255,7 +255,7 @@
           <DEPENDENCIES>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -540,7 +540,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -590,7 +590,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -680,7 +680,7 @@
           <DEPENDENCIES>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -965,7 +965,7 @@
             </COMP>
             <LINK relation="Covered">
               <REFOBJ>
-                <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -981,6 +981,56 @@
             <LINK relation="Covered">
               <REFOBJ>
                 <ID name="HttpsServer" mc="Standard.Lifeline" uid="1beed1f7-20b8-4fa3-8759-bbf9abfdaa44"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="c364b142-9e41-40fc-ab49-1f0eb6b713b6"/>
+          <ATTRIBUTES>
+            <ATT name="LineNumber">633</ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="SentMessage">
+              <OBJECT>
+                <ID name="create" mc="Standard.Message" uid="d3369405-c034-4f42-a039-bbc2b5177132"/>
+                <ATTRIBUTES>
+                  <ATT name="Argument"></ATT>
+                  <ATT name="KindOfMessage">CompleteKind</ATT>
+                  <ATT name="SortOfMessage">CreateMessage</ATT>
+                  <ATT name="Sequence"><![CDATA[17]]></ATT>
+                  <ATT name="Name"><![CDATA[create]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <LINK relation="ReceiveEvent">
+                    <REFOBJ>
+                      <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="e487baad-bffd-4933-ac7e-aa336889a312"/>
+                    </REFOBJ>
+                  </LINK>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <LINK relation="Covered">
+              <REFOBJ>
+                <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+              </REFOBJ>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="" mc="Standard.ExecutionOccurenceSpecification" uid="e487baad-bffd-4933-ac7e-aa336889a312"/>
+          <ATTRIBUTES>
+            <ATT name="LineNumber">633</ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Covered">
+              <REFOBJ>
+                <ID name="UdpServer" mc="Standard.Lifeline" uid="495c3ef0-ebf1-4df2-aa36-529b69478282"/>
               </REFOBJ>
             </LINK>
           </DEPENDENCIES>
@@ -1003,10 +1053,10 @@
           </DEPENDENCIES>
         </OBJECT>
         <OBJECT>
-          <ID name="Chat System" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
+          <ID name="GUI" mc="Standard.Lifeline" uid="63598bd1-8888-4642-9719-38a07a23e1d7"/>
           <ATTRIBUTES>
             <ATT name="Selector"></ATT>
-            <ATT name="Name"><![CDATA[Chat System]]></ATT>
+            <ATT name="Name"><![CDATA[GUI]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES></DEPENDENCIES>
@@ -1052,6 +1102,15 @@
           <ATTRIBUTES>
             <ATT name="Selector"></ATT>
             <ATT name="Name"><![CDATA[HttpsServer]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES></DEPENDENCIES>
+        </OBJECT>
+        <OBJECT>
+          <ID name="UdpServer" mc="Standard.Lifeline" uid="495c3ef0-ebf1-4df2-aa36-529b69478282"/>
+          <ATTRIBUTES>
+            <ATT name="Selector"></ATT>
+            <ATT name="Name"><![CDATA[UdpServer]]></ATT>
             <ATT name="status">1970354901745664</ATT>
           </ATTRIBUTES>
           <DEPENDENCIES></DEPENDENCIES>

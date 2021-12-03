@@ -10,4 +10,6 @@ public interface NetworkController {
     JSONObject sendBroadcastWithResponse(JSONObject message, int timeout) throws BroadcastException;
 
     List<Pair<InetAddress, String>> listAvailableNetworks() throws NetworkListingException;
+
+    void setBroadcastAddress(InetAddress broadcastAddress);
 }

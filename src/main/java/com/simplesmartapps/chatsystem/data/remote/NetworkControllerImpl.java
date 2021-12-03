@@ -11,6 +11,7 @@ import java.util.List;
 
 public class NetworkControllerImpl implements NetworkController {
     private static final NetworkController INSTANCE = new NetworkControllerImpl();
+    private InetAddress mBroadcastAddress;
 
     private NetworkControllerImpl() {
     }
@@ -20,18 +21,24 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
+    public void setBroadcastAddress(InetAddress broadcastAddress) {
+        this.mBroadcastAddress = broadcastAddress;
+    }
+
+    @Override
     public JSONObject sendBroadcastWithResponse(JSONObject message, int timeout) {
         return null;
     }
 
-    private void broadcast(String broadcastMessage, InetAddress address) throws IOException {
+    private void broadcast(String broadcastMessage) throws IOException {
+        assert (mBroadcastAddress != null);
         DatagramSocket socket = new DatagramSocket();
         socket.setBroadcast(true);
 
         byte[] buffer = broadcastMessage.getBytes();
 
         DatagramPacket packet
-                = new DatagramPacket(buffer, buffer.length, address, 4445);
+                = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, 4445);
         socket.send(packet);
         socket.close();
     }
@@ -52,7 +59,7 @@ public class NetworkControllerImpl implements NetworkController {
 
                 networkInterface.getInterfaceAddresses().stream()
                         .map(interfaceAddress -> new Pair<>(interfaceAddress.getBroadcast(), displayName))
-                        .filter(pair -> pair.getValue() != null)
+                        .filter(pair -> pair.getKey() != null)
                         .forEach(broadcastPair::add);
             }
         } catch (SocketException e) {

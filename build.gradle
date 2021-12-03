@@ -34,6 +34,7 @@ javafx {
 
 dependencies {
     implementation('org.kordamp.ikonli:ikonli-javafx:12.2.0')
+    implementation('org.json:json:20210307')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

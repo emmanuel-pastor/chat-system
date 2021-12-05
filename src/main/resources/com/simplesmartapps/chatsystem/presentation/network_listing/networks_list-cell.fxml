@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<GridPane fx:id="gridPane" hgap="20.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+          xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="10.0" left="50.0" right="50.0" top="10.0"/>
+    </padding>
+    <Text fx:id="interfaceName" strokeType="OUTSIDE" strokeWidth="0.0"
+          text="Killer(R) Wi-Fi 6 AX1650x 160MHz Wireless Network Adapter (200NGW)" GridPane.halignment="LEFT"
+          GridPane.valignment="CENTER">
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Text>
+    <Text fx:id="broadcastAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="192.168.0.255" GridPane.columnIndex="1"
+          GridPane.halignment="RIGHT" GridPane.valignment="CENTER"/>
+    <cursor>
+        <Cursor fx:constant="HAND"/>
+    </cursor>
+</GridPane>

@@ -5,11 +5,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.SelectionMode;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
 
@@ -66,6 +69,7 @@ public class NetworkListingPage implements Initializable {
         mViewModel.mAvailableNetworksList.observe(this, updatedList ->
                 networksListView.setItems(FXCollections.observableList(updatedList))
         );
+        networksListView.setPlaceholder(emptyListPlaceholder());
         networksListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         networksListView.getSelectionModel().getSelectedIndices().addListener((ListChangeListener<Integer>) change -> {
             if (change.next() && change.wasAdded()) {
@@ -76,5 +80,21 @@ public class NetworkListingPage implements Initializable {
         networksListView.setCellFactory(listView -> new NetworksListCell());
 
         refreshButton.setOnMouseClicked(event -> mViewModel.onRefreshButtonClicked());
+    }
+
+    private VBox emptyListPlaceholder() {
+        URL imagePath = this.getClass().getResource("images/no_connection.png");
+        assert imagePath != null;
+        Image image = new Image(imagePath.toString());
+        ImageView imageView = new ImageView(image);
+
+        Text text = new Text("No available network...");
+        text.setFont(new Font("System", 20));
+        text.setFill(Color.web("#e85125"));
+
+        VBox vbox = new VBox(imageView, text);
+        vbox.setSpacing(40);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        return vbox;
     }
 }

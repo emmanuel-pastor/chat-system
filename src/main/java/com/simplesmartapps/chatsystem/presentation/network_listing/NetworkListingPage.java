@@ -1,9 +1,6 @@
 package com.simplesmartapps.chatsystem.presentation.network_listing;
 
-import com.simplesmartapps.chatsystem.data.remote.NetworkController;
-import com.simplesmartapps.chatsystem.data.remote.NetworkControllerImpl;
-import com.simplesmartapps.chatsystem.domain.ListAvailableNetworksUseCase;
-import com.simplesmartapps.chatsystem.domain.SelectNetworkUseCase;
+import com.simplesmartapps.chatsystem.ChatSystemApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -21,10 +18,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class NetworkListingPage implements Initializable {
-    private final NetworkController networkController = NetworkControllerImpl.getInstance();
-    private final ListAvailableNetworksUseCase listAvailableNetworksUseCase = new ListAvailableNetworksUseCase(networkController);
-    private final SelectNetworkUseCase selectNetworkUseCase = new SelectNetworkUseCase(networkController);
-    private final NetworkListingViewModel mViewModel = new NetworkListingViewModel(listAvailableNetworksUseCase, selectNetworkUseCase);
+    private final NetworkListingViewModel mViewModel;
+
+    public NetworkListingPage() {
+        mViewModel = ChatSystemApplication.injector.getInstance(NetworkListingViewModel.class);
+    }
 
     @FXML
     private ListView<Pair<InetAddress, String>> networksListView = new ListView<>(FXCollections.emptyObservableList());

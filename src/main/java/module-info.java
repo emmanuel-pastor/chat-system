@@ -4,6 +4,7 @@ module com.simplesmartapps.chatsystem {
 
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fontawesome;
+    requires com.google.guice;
     requires org.json;
     requires java.desktop;
 

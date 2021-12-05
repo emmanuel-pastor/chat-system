@@ -32,6 +32,7 @@ javafx {
 dependencies {
     implementation('org.kordamp.ikonli:ikonli-javafx:12.2.0')
     implementation 'org.kordamp.ikonli:ikonli-fontawesome-pack:12.2.0'
+    implementation "com.google.inject:guice:5.0.1"
     implementation('org.json:json:20210307')
     implementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
 

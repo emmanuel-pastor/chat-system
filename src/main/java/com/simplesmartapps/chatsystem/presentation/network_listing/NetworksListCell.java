@@ -12,13 +12,13 @@ import java.net.InetAddress;
 
 public class NetworksListCell extends ListCell<Pair<InetAddress, String>> {
     @FXML
-    GridPane gridPane;
+    private GridPane gridPane;
 
     @FXML
-    Text interfaceName;
+    private Text interfaceName;
 
     @FXML
-    Text broadcastAddress;
+    private Text broadcastAddress;
 
     public NetworksListCell() {
         loadFXML();

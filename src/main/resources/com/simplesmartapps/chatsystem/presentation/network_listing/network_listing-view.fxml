@@ -26,7 +26,7 @@
         </font>
     </Button>
     <StackPane>
-        <ListView fx:id="networksListView" VBox.vgrow="NEVER"/>
+        <ListView fx:id="networksListView" StackPane.alignment="CENTER" VBox.vgrow="NEVER"/>
         <ProgressIndicator fx:id="loadingIndicator" visible="false"/>
         <HBox fx:id="errorContainer" alignment="CENTER" spacing="20.0" StackPane.alignment="CENTER">
             <FontIcon iconColor="#d93939" iconLiteral="fa-times-circle" iconSize="30"/>

@@ -6,6 +6,7 @@ import com.simplesmartapps.chatsystem.domain.ListAvailableNetworksUseCase;
 import com.simplesmartapps.chatsystem.domain.SelectNetworkUseCase;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
+import javafx.application.Platform;
 import javafx.util.Pair;
 
 import java.net.InetAddress;
@@ -38,7 +39,7 @@ public class NetworkListingViewModel {
 
     private void refreshAvailableNetworksList() {
         mSate.setValue(ViewState.LOADING);
-        Thread thread = new Thread(() -> {
+        Platform.runLater(() -> {
             try {
                 mAvailableNetworksList.setValue(mListAvailableNetworksUseCase.execute());
                 mSate.setValue(ViewState.READY);
@@ -52,6 +53,5 @@ public class NetworkListingViewModel {
                 e.printStackTrace();
             }
         });
-        thread.start();
     }
 }

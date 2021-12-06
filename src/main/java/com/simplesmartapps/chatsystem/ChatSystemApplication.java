@@ -15,7 +15,7 @@ public class ChatSystemApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         injector = Guice.createInjector(new CoreModule());
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("presentation/network_listing/network_listing-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("presentation/network_listing/network_listing_page-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 840, 480);
         stage.setTitle("Chat System");
         stage.setScene(scene);

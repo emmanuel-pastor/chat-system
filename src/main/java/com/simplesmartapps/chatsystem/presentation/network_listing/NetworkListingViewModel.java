@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.remote.NetworkListingException;
 import com.simplesmartapps.chatsystem.domain.ListAvailableNetworksUseCase;
 import com.simplesmartapps.chatsystem.domain.SelectNetworkUseCase;
+import com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionPage;
+import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.application.Platform;
@@ -31,6 +33,7 @@ public class NetworkListingViewModel {
     public void onListItemClicked(int indexInList) {
         InetAddress selectedNetwork = mAvailableNetworksList.getValue().get(indexInList).getKey();
         mSelectNetworkUseCase.execute(selectedNetwork);
+        NavigationUtil.navigateTo(UsernameSelectionPage.class);
     }
 
     public void onRefreshButtonClicked() {

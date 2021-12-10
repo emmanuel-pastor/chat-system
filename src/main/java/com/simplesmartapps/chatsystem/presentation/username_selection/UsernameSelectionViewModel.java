@@ -1,11 +1,10 @@
 package com.simplesmartapps.chatsystem.presentation.username_selection;
 
 import com.google.inject.Inject;
-import com.simplesmartapps.chatsystem.data.remote.SelectUsernameException;
 import com.simplesmartapps.chatsystem.domain.SelectUsernameUseCase;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
-import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 import static com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionViewModel.ValidityState.*;
 import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
@@ -23,27 +22,49 @@ public class UsernameSelectionViewModel {
     }
 
     public void onSubmitButtonClicked(String username) {
+        checkUsernameValidity(username);
+    }
+
+    public void onEnterKeyPressed(String username) {
+        checkUsernameValidity(username);
+    }
+
+    private void checkUsernameValidity(String username) {
         mState.setValue(LOADING);
-        Platform.runLater(() -> {
-            try {
-                boolean isValid = mSelectUsernameUseCase.execute(username);
-                mState.setValue(READY);
-                if (isValid) {
-                    mIsValid.setValue(VALID);
-                } else {
-                    mIsValid.setValue(INVALID);
-                }
-            } catch (SelectUsernameException e) {
-                mErrorText.setValue("Could not check username validity");
-                mState.setValue(ERROR);
-                e.printStackTrace();
-            } catch (Exception e) {
-                mErrorText.setValue("An unexpected error occurred");
-                mState.setValue(ERROR);
-                e.printStackTrace();
+        if (username.isBlank()) {
+            mErrorText.setValue("Username should not be empty");
+            mState.setValue(ERROR);
+            return;
+        }
+        Task<Boolean> task = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                return mSelectUsernameUseCase.execute(username);
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            boolean isValid = (boolean) event.getSource().getValue();
+            mState.setValue(READY);
+            if (isValid) {
+                mIsValid.setValue(VALID);
+            } else {
+                mIsValid.setValue(INVALID);
             }
         });
+
+        task.setOnFailed(event -> {
+            Throwable exception = event.getSource().getException();
+            if ("SelectUsernameException".equals(exception.toString())) {
+                mErrorText.setValue("Could not check username validity");
+            }
+            mErrorText.setValue("An unexpected error occurred");
+            mState.setValue(ERROR);
+        });
+
+        new Thread(task).start();
     }
+
 
     enum ValidityState {
         UNKNOWN,

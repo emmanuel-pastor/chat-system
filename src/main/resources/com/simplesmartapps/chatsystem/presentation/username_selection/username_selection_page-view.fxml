@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionPage">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a username" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="36.0"/>
+        </font>
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+    </Text>
+    <StackPane>
+        <VBox alignment="CENTER" spacing="10.0">
+            <StackPane.margin>
+                <Insets top="10.0"/>
+            </StackPane.margin>
+            <HBox alignment="CENTER">
+                <TextField fx:id="usernameTextField" maxWidth="200.0" prefWidth="200.0" promptText="Username">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </TextField>
+                <FontIcon fx:id="validationIcon" iconSize="22">
+                    <HBox.margin>
+                        <Insets left="15.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </FontIcon>
+            </HBox>
+            <Text fx:id="errorTextView" fill="#d93939" strokeType="OUTSIDE" strokeWidth="0.0" visible="false">
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <font>
+                    <Font size="20.0"/>
+                </font>
+            </Text>
+            <StackPane>
+                <VBox.margin>
+                    <Insets bottom="20.0"/>
+                </VBox.margin>
+                <Button fx:id="submitButton" mnemonicParsing="false" text="Submit">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
+                <ProgressIndicator fx:id="loadingIndicator" maxHeight="20.0" maxWidth="20.0" visible="false"/>
+            </StackPane>
+            <effect>
+                <Glow/>
+            </effect>
+        </VBox>
+    </StackPane>
+</VBox>

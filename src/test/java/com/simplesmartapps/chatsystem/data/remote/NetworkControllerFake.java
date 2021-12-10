@@ -17,7 +17,7 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
-    public JSONObject sendBroadcastWithResponse(JSONObject message, int timeout) {
+    public List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) {
         return null;
     }
 

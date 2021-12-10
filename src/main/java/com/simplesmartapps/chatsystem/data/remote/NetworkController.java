@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.List;
 
 public interface NetworkController {
-    JSONObject sendBroadcastWithResponse(JSONObject message, int timeout) throws BroadcastException;
+    List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException;
 
     List<Pair<InetAddress, String>> listAvailableNetworks() throws NetworkListingException;
 

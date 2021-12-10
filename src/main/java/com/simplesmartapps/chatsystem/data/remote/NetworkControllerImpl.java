@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -26,8 +27,29 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
-    public JSONObject sendBroadcastWithResponse(JSONObject message, int timeout) {
-        return null;
+    public List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException {
+        List<JSONObject> responseList = new ArrayList<>(Collections.emptyList());
+        try (DatagramSocket serverSocket = new DatagramSocket(60418)) {
+            serverSocket.setSoTimeout(timeout);
+            broadcast(message.toString());
+            try {
+                byte[] receiveData = new byte[1024];
+                while (true) {
+                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                    serverSocket.receive(receivePacket);
+                    String jsonString = new String(receivePacket.getData());
+                    JSONObject jsonResponse = new JSONObject(jsonString);
+                    responseList.add(jsonResponse);
+                }
+
+            } catch (SocketTimeoutException e) {
+                /* Intended to happen */
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BroadcastException(e.getMessage());
+        }
+        return responseList;
     }
 
     private void broadcast(String broadcastMessage) throws IOException {

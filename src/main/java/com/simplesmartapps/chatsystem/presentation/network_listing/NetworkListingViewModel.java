@@ -32,7 +32,15 @@ public class NetworkListingViewModel {
     public void onListItemClicked(int indexInList) {
         InetAddress selectedNetwork = mAvailableNetworksList.getValue().get(indexInList).getKey();
         mSelectNetworkUseCase.execute(selectedNetwork);
+
+        cleanupObservers();
         NavigationUtil.navigateTo(UsernameSelectionPage.class);
+    }
+
+    private void cleanupObservers() {
+        mSate.removeObserver(this);
+        mAvailableNetworksList.removeObserver(this);
+        mErrorText.removeObserver(this);
     }
 
     public void onRefreshButtonClicked() {

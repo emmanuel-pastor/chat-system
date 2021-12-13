@@ -39,7 +39,7 @@ public class UsernameSelectionViewModel {
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
-                return mSelectUsernameUseCase.execute(username);
+                return mSelectUsernameUseCase.execute(username.trim());
             }
         };
 
@@ -57,8 +57,9 @@ public class UsernameSelectionViewModel {
             Throwable exception = event.getSource().getException();
             if ("SelectUsernameException".equals(exception.toString())) {
                 mErrorText.setValue("Could not check username validity");
+            } else {
+                mErrorText.setValue("An unexpected error occurred");
             }
-            mErrorText.setValue("An unexpected error occurred");
             mState.setValue(ERROR);
         });
 

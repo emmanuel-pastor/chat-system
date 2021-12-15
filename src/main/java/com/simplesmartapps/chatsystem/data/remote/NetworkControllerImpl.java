@@ -1,6 +1,6 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
-import javafx.util.Pair;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -65,8 +65,8 @@ public class NetworkControllerImpl implements NetworkController {
         socket.close();
     }
 
-    public List<Pair<InetAddress, String>> listAvailableNetworks() throws NetworkListingException {
-        List<Pair<InetAddress, String>> broadcastPair = new ArrayList<>();
+    public List<BroadcastNetwork> listAvailableNetworks() throws NetworkListingException {
+        List<BroadcastNetwork> broadcastNetworks = new ArrayList<>();
         Enumeration<NetworkInterface> interfaces;
 
         try {
@@ -80,14 +80,14 @@ public class NetworkControllerImpl implements NetworkController {
                 }
 
                 networkInterface.getInterfaceAddresses().stream()
-                        .map(interfaceAddress -> new Pair<>(interfaceAddress.getBroadcast(), displayName))
-                        .filter(pair -> pair.getKey() != null)
-                        .forEach(broadcastPair::add);
+                        .map(interfaceAddress -> new BroadcastNetwork(interfaceAddress.getBroadcast(), displayName))
+                        .filter(network -> network.address() != null)
+                        .forEach(broadcastNetworks::add);
             }
         } catch (SocketException e) {
             throw new NetworkListingException(e.getMessage());
         }
 
-        return broadcastPair;
+        return broadcastNetworks;
     }
 }

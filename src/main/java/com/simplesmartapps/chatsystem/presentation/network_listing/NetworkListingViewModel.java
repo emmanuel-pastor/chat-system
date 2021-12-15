@@ -1,6 +1,7 @@
 package com.simplesmartapps.chatsystem.presentation.network_listing;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import com.simplesmartapps.chatsystem.domain.ListAvailableNetworksUseCase;
 import com.simplesmartapps.chatsystem.domain.SelectNetworkUseCase;
 import com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionPage;
@@ -8,7 +9,6 @@ import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.concurrent.Task;
-import javafx.util.Pair;
 
 import java.net.InetAddress;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class NetworkListingViewModel {
     private final ListAvailableNetworksUseCase mListAvailableNetworksUseCase;
     private final SelectNetworkUseCase mSelectNetworkUseCase;
 
-    public ObservableProperty<List<Pair<InetAddress, String>>> mAvailableNetworksList = new ObservableProperty<>(Collections.emptyList());
+    public ObservableProperty<List<BroadcastNetwork>> mAvailableNetworksList = new ObservableProperty<>(Collections.emptyList());
     public ObservableProperty<ViewState> mSate = new ObservableProperty<>(ViewState.READY);
     public ObservableProperty<String> mErrorText = new ObservableProperty<>("");
 
@@ -30,7 +30,7 @@ public class NetworkListingViewModel {
     }
 
     public void onListItemClicked(int indexInList) {
-        InetAddress selectedNetwork = mAvailableNetworksList.getValue().get(indexInList).getKey();
+        InetAddress selectedNetwork = mAvailableNetworksList.getValue().get(indexInList).address();
         mSelectNetworkUseCase.execute(selectedNetwork);
 
         cleanupObservers();
@@ -50,16 +50,16 @@ public class NetworkListingViewModel {
     private void refreshAvailableNetworksList() {
         mSate.setValue(ViewState.LOADING);
 
-        Task<List<Pair<InetAddress, String>>> task = new Task<>() {
+        Task<List<BroadcastNetwork>> task = new Task<>() {
             @Override
-            protected List<Pair<InetAddress, String>> call() throws Exception {
+            protected List<BroadcastNetwork> call() throws Exception {
                 return mListAvailableNetworksUseCase.execute();
             }
         };
 
         task.setOnSucceeded(event -> {
             @SuppressWarnings("unchecked")
-            List<Pair<InetAddress, String>> networksList = (List<Pair<InetAddress, String>>) event.getSource().getValue();
+            List<BroadcastNetwork> networksList = (List<BroadcastNetwork>) event.getSource().getValue();
             mAvailableNetworksList.setValue(networksList);
             mSate.setValue(ViewState.READY);
         });

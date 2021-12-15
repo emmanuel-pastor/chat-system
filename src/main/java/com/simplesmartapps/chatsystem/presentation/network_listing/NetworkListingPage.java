@@ -1,12 +1,16 @@
 package com.simplesmartapps.chatsystem.presentation.network_listing;
 
 import com.simplesmartapps.chatsystem.ChatSystemApplication;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -14,9 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -28,7 +30,7 @@ public class NetworkListingPage implements Initializable {
     }
 
     @FXML
-    private ListView<Pair<InetAddress, String>> networksListView = new ListView<>(FXCollections.emptyObservableList());
+    private ListView<BroadcastNetwork> networksListView = new ListView<>(FXCollections.emptyObservableList());
 
     @FXML
     private Button refreshButton;

@@ -1,16 +1,15 @@
 package com.simplesmartapps.chatsystem.presentation.network_listing;
 
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
-public class NetworksListCell extends ListCell<Pair<InetAddress, String>> {
+public class NetworksListCell extends ListCell<BroadcastNetwork> {
     @FXML
     private GridPane gridPane;
 
@@ -35,15 +34,15 @@ public class NetworksListCell extends ListCell<Pair<InetAddress, String>> {
     }
 
     @Override
-    protected void updateItem(Pair<InetAddress, String> pair, boolean empty) {
-        super.updateItem(pair, empty);
+    protected void updateItem(BroadcastNetwork network, boolean empty) {
+        super.updateItem(network, empty);
 
-        if (empty || pair == null) {
+        if (empty || network == null) {
             setText(null);
             setGraphic(null);
         } else {
-            interfaceName.setText(pair.getValue());
-            broadcastAddress.setText(pair.getKey().getHostName());
+            interfaceName.setText(network.interfaceName());
+            broadcastAddress.setText(network.address().getHostName());
 
             setText(null);
             setGraphic(gridPane);

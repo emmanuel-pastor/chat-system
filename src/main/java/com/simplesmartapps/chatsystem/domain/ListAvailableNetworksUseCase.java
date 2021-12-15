@@ -3,6 +3,7 @@ package com.simplesmartapps.chatsystem.domain;
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.NetworkListingException;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import javafx.util.Pair;
 
 import java.net.InetAddress;
@@ -16,7 +17,7 @@ public class ListAvailableNetworksUseCase {
         this.mNetworkController = netWorkController;
     }
 
-    public List<Pair<InetAddress, String>> execute() throws NetworkListingException {
+    public List<BroadcastNetwork> execute() throws NetworkListingException {
         return mNetworkController.listAvailableNetworks();
     }
 }

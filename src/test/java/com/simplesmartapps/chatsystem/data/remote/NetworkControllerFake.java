@@ -1,6 +1,6 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
-import javafx.util.Pair;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
@@ -22,9 +22,9 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
-    public List<Pair<InetAddress, String>> listAvailableNetworks() {
+    public List<BroadcastNetwork> listAvailableNetworks() {
         InetAddress fakeAddress = InetAddress.getLoopbackAddress();
-        return List.of(new Pair<>(fakeAddress, "Loopback network interface"));
+        return List.of(new BroadcastNetwork(fakeAddress, "Loopback network interface"));
     }
 
     @Override

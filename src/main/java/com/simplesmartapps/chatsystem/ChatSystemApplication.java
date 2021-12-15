@@ -18,7 +18,7 @@ public class ChatSystemApplication extends Application {
         injector = Guice.createInjector(new CoreModule());
         appStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("presentation/network_listing/network_listing_page-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 840, 480);
+        Scene scene = new Scene(fxmlLoader.load(), 860, 550);
         stage.setTitle("Chat System");
         stage.setScene(scene);
         stage.show();

@@ -37,6 +37,9 @@ public class UsernameSelectionPage implements Initializable {
     @FXML
     private ProgressIndicator loadingIndicator;
 
+    @FXML
+    private Button networkPageButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mViewModel.mState.observe(this, newState -> {
@@ -80,6 +83,8 @@ public class UsernameSelectionPage implements Initializable {
         });
 
         submitButton.setOnMouseClicked(event -> mViewModel.onSubmitButtonClicked(usernameTextField.getText()));
+
+        networkPageButton.setOnMouseClicked(event -> mViewModel.networkPageButtonCLicked());
 
         usernameTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {

@@ -2,6 +2,8 @@ package com.simplesmartapps.chatsystem.presentation.username_selection;
 
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.domain.SelectUsernameUseCase;
+import com.simplesmartapps.chatsystem.presentation.network_listing.NetworkListingPage;
+import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.concurrent.Task;
@@ -66,6 +68,16 @@ public class UsernameSelectionViewModel {
         new Thread(task).start();
     }
 
+    public void networkPageButtonCLicked() {
+        cleanup();
+        NavigationUtil.navigateTo(NetworkListingPage.class);
+    }
+
+    private void cleanup() {
+        mState.removeObserver(this);
+        mIsValid.removeObserver(this);
+        mErrorText.removeObserver(this);
+    }
 
     enum ValidityState {
         UNKNOWN,

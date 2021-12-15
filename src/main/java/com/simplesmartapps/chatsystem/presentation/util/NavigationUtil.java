@@ -28,9 +28,7 @@ public class NavigationUtil {
             String classNameSnakeCase = camelToSnakeCase(className);
             Parent root = FXMLLoader.load(Objects.requireNonNull(pageClass.getResource(classNameSnakeCase + "-view.fxml")));
 
-            double width = appStage.getWidth();
-            double height = appStage.getHeight();
-            Scene scene = new Scene(root, width, height);
+            Scene scene = new Scene(root);
 
             appStage.setScene(scene);
             appStage.show();

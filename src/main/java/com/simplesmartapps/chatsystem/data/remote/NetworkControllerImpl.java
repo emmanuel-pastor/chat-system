@@ -46,8 +46,7 @@ public class NetworkControllerImpl implements NetworkController {
                 /* Intended to happen */
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new BroadcastException(e.getMessage());
+            throw new BroadcastException("Error while creating the socket", e);
         }
         return responseList;
     }
@@ -85,7 +84,7 @@ public class NetworkControllerImpl implements NetworkController {
                         .forEach(broadcastNetworks::add);
             }
         } catch (SocketException e) {
-            throw new NetworkListingException(e.getMessage());
+            throw new NetworkListingException("Could not get the available networks", e);
         }
 
         return broadcastNetworks;

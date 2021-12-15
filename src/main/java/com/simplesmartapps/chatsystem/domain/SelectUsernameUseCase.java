@@ -23,7 +23,7 @@ public class SelectUsernameUseCase {
             List<JSONObject> responseList = mNetworkController.sendBroadcastWithMultipleResponses(toJsonObjectRequest(username), USERNAME_CHECK_TIMEOUT);
             return !responseList.stream().map(this::fromJsonObjectResponse).toList().contains(false);
         } catch (BroadcastException e) {
-            throw new SelectUsernameException(e.getMessage());
+            throw new SelectUsernameException("A network error occurred while trying to validate the username", e);
         }
     }
 

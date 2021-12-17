@@ -8,6 +8,12 @@ plugins {
 group 'com.simple-smart-apps'
 version '1.0'
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
+    }
+}
+
 repositories {
     mavenCentral()
 }

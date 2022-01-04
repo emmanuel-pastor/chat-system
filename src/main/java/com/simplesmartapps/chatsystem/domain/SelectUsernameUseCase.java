@@ -21,7 +21,7 @@ public class SelectUsernameUseCase {
     public boolean execute(String username) throws SelectUsernameException {
         try {
             List<JSONObject> responseList = mNetworkController.sendBroadcastWithMultipleResponses(toJsonObjectRequest(username), USERNAME_CHECK_TIMEOUT);
-            return !responseList.stream().map(this::fromJsonObjectResponse).toList().contains(false);
+            return !(responseList.stream().map(this::fromJsonObjectResponse).filter(b -> !b).toArray().length > 0);
         } catch (BroadcastException e) {
             throw new SelectUsernameException("A network error occurred while trying to validate the username", e);
         }

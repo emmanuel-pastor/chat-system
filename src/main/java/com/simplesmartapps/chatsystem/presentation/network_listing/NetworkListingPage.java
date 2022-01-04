@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
+
 public class NetworkListingPage implements Initializable {
     private final NetworkListingViewModel mViewModel;
 
@@ -47,22 +49,18 @@ public class NetworkListingPage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mViewModel.mSate.observe(this, newState -> {
-            switch (newState) {
-                case LOADING -> {
-                    networksListView.setVisible(false);
-                    errorContainer.setVisible(false);
-                    loadingIndicator.setVisible(true);
-                }
-                case READY -> {
-                    loadingIndicator.setVisible(false);
-                    errorContainer.setVisible(false);
-                    networksListView.setVisible(true);
-                }
-                case ERROR -> {
-                    loadingIndicator.setVisible(false);
-                    networksListView.setVisible(false);
-                    errorContainer.setVisible(true);
-                }
+            if (newState == LOADING) {
+                networksListView.setVisible(false);
+                errorContainer.setVisible(false);
+                loadingIndicator.setVisible(true);
+            } else if (newState == READY) {
+                loadingIndicator.setVisible(false);
+                errorContainer.setVisible(false);
+                networksListView.setVisible(true);
+            } else if (newState == ERROR) {
+                loadingIndicator.setVisible(false);
+                networksListView.setVisible(false);
+                errorContainer.setVisible(true);
             }
         });
 

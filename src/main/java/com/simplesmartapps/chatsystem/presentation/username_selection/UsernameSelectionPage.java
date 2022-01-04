@@ -15,6 +15,10 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionViewModel.ValidityState.INVALID;
+import static com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionViewModel.ValidityState.VALID;
+import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
+
 public class UsernameSelectionPage implements Initializable {
     private final UsernameSelectionViewModel mViewModel;
 
@@ -43,42 +47,36 @@ public class UsernameSelectionPage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mViewModel.mState.observe(this, newState -> {
-            switch (newState) {
-                case LOADING -> {
-                    submitButton.setVisible(false);
-                    loadingIndicator.setVisible(true);
-                    usernameTextField.setDisable(true);
-                    validationIcon.setVisible(false);
-                    errorTextView.setVisible(false);
-                }
-                case READY -> {
-                    loadingIndicator.setVisible(false);
-                    submitButton.setVisible(true);
-                    usernameTextField.setDisable(false);
-                    validationIcon.setVisible(true);
-                    errorTextView.setVisible(false);
-                }
-                case ERROR -> {
-                    loadingIndicator.setVisible(false);
-                    submitButton.setVisible(true);
-                    usernameTextField.setDisable(false);
-                    validationIcon.setVisible(false);
-                    errorTextView.setVisible(true);
-                }
+            if (newState == LOADING) {
+                submitButton.setVisible(false);
+                loadingIndicator.setVisible(true);
+                usernameTextField.setDisable(true);
+                validationIcon.setVisible(false);
+                errorTextView.setVisible(false);
+            } else if (newState == READY) {
+                loadingIndicator.setVisible(false);
+                submitButton.setVisible(true);
+                usernameTextField.setDisable(false);
+                validationIcon.setVisible(true);
+                errorTextView.setVisible(false);
+            } else if (newState == ERROR) {
+                loadingIndicator.setVisible(false);
+                submitButton.setVisible(true);
+                usernameTextField.setDisable(false);
+                validationIcon.setVisible(false);
+                errorTextView.setVisible(true);
             }
         });
         mViewModel.mErrorText.observe(this, newText -> errorTextView.setText(newText));
 
         mViewModel.mIsValid.observe(this, newState -> {
-            switch (newState) {
-                case VALID -> {
-                    validationIcon.setIconLiteral("fa-check-circle");
-                    validationIcon.setIconColor(Color.web("#1f9a4e"));
-                }
-                case INVALID -> {
-                    validationIcon.setIconLiteral("fa-times-circle");
-                    validationIcon.setIconColor(Color.web("#d93939"));
-                }
+            if (newState == VALID) {
+                validationIcon.setIconLiteral("fa-check-circle");
+                validationIcon.setIconColor(Color.web("#1f9a4e"));
+            }
+            if (newState == INVALID) {
+                validationIcon.setIconLiteral("fa-times-circle");
+                validationIcon.setIconColor(Color.web("#d93939"));
             }
         });
 

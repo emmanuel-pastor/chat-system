@@ -51,6 +51,16 @@ public class NetworkControllerImpl implements NetworkController {
         return responseList;
     }
 
+    public void sendUDP(JSONObject message, InetAddress inetAddress, int port) throws IOException {
+        DatagramSocket socket = new DatagramSocket();
+
+        byte[] buffer = message.toString().getBytes();
+
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, inetAddress, port);
+        socket.send(packet);
+        socket.close();
+    }
+
     private void broadcast(String broadcastMessage) throws IOException {
         assert (mBroadcastAddress != null);
         DatagramSocket socket = new DatagramSocket();
@@ -58,8 +68,7 @@ public class NetworkControllerImpl implements NetworkController {
 
         byte[] buffer = broadcastMessage.getBytes();
 
-        DatagramPacket packet
-                = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, 4445);
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, 4445);
         socket.send(packet);
         socket.close();
     }

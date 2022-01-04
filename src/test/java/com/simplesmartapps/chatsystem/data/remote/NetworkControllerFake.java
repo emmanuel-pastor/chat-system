@@ -22,6 +22,10 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
+    public void sendUDP(JSONObject message, InetAddress inetAddress, int port) {
+    }
+
+    @Override
     public List<BroadcastNetwork> listAvailableNetworks() {
         InetAddress fakeAddress = InetAddress.getLoopbackAddress();
         return List.of(new BroadcastNetwork(fakeAddress, "Loopback network interface"));

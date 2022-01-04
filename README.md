@@ -4,7 +4,7 @@ A local peer-to-peer chat system application.
 ## How to run the application?
 * Download the project
 * Checkout the `dev` branch
-* Download the Java JDK, version 16 or above.
+* Download the Java JDK, version 11 or above.
 * [Download gradle](https://gradle.org/install/).
 * In the root directory of the project,
   * on **Linux** : type `gradle run`

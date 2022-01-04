@@ -21,6 +21,6 @@ public class CheckUsernameUseCase {
         boolean isValid = !ChatSystemApplication.username.equals(usernameJsonRequest.getString("username"));
         usernameJsonResponse.put("is_valid", isValid);
 
-        mNetworkController.sendUDP(usernameJsonResponse, inetAddressToSendResponse, 4445);
+        mNetworkController.sendUDP(usernameJsonResponse, inetAddressToSendResponse, 60418);
     }
 }

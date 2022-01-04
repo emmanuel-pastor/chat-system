@@ -7,7 +7,7 @@ A local peer-to-peer chat system application.
 * Download the Java JDK, version 11 or above.
 * [Download gradle](https://gradle.org/install/).
 * In the root directory of the project,
-  * on **Linux** : type `gradle run`
+  * on **Linux** : type `./gradlew run`
   * on **Windows** : type `.\gradlew run`
   
 ## Currently available functionalities

@@ -12,4 +12,4 @@ A local peer-to-peer chat system application.
   
 ## Currently available functionalities
 * 🔌 Select the network you want to discuss on
-* 👤 Select a username & send a username validation request over the network
+* 👤 Select a username and have its availability checked by connected users

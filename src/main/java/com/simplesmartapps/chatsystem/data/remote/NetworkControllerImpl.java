@@ -27,6 +27,21 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
+    public String getLocalhostMacAddress() throws UnknownHostException, SocketException {
+        InetAddress localHost = InetAddress.getLocalHost();
+        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
+        byte[] hardwareAddress = networkInterface.getHardwareAddress();
+
+        /* Format each byte in the array to a hexadecimal number using String#format. */
+        String[] hexadecimal = new String[hardwareAddress.length];
+        for (int i = 0; i < hardwareAddress.length; i++) {
+            hexadecimal[i] = String.format("%02X", hardwareAddress[i]);
+        }
+
+        return String.join("-", hexadecimal);
+    }
+
+    @Override
     public List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException {
         List<JSONObject> responseList = new ArrayList<>(Collections.emptyList());
         try (DatagramSocket serverSocket = new DatagramSocket(60418)) {

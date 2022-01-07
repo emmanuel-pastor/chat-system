@@ -2,6 +2,7 @@ package com.simplesmartapps.chatsystem;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.simplesmartapps.chatsystem.data.remote.UDPServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class ChatSystemApplication extends Application {
     public static Injector injector;
     public static Stage appStage;
-    public static String username = "";
+    public static String username = "Romain";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -23,6 +24,8 @@ public class ChatSystemApplication extends Application {
         stage.setTitle("Chat System");
         stage.setScene(scene);
         stage.show();
+        UDPServer udpServer = injector.getInstance(UDPServer.class);
+        udpServer.run();
     }
 
     public static void main(String[] args) {

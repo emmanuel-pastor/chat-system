@@ -30,6 +30,10 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
+    public void sendBroadcast(JSONObject message, int port) {
+    }
+
+    @Override
     public void sendUDP(JSONObject message, InetAddress inetAddress, int port) {
     }
 

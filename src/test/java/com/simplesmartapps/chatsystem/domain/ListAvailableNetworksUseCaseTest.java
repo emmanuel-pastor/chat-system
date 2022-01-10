@@ -3,7 +3,7 @@ package com.simplesmartapps.chatsystem.domain;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.simplesmartapps.chatsystem.CoreTestModule;
-import com.simplesmartapps.chatsystem.data.remote.NetworkListingException;
+import com.simplesmartapps.chatsystem.data.remote.exception.NetworkListingException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

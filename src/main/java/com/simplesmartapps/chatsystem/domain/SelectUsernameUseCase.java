@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
-import com.simplesmartapps.chatsystem.data.remote.SelectUsernameException;
+import com.simplesmartapps.chatsystem.data.remote.exception.SelectUsernameException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
@@ -45,8 +45,7 @@ public class SelectUsernameUseCase {
 
     private JSONObject createUsernameValidationRequest() {
         JSONObject baseObject = new JSONObject();
-        baseObject.put("type", "USERNAME_VALIDATION");
-        return baseObject;
+        return baseObject.put("type", "USERNAME_VALIDATION");
     }
 
     private User userFromBroadcastResponse(BroadcastResponse broadcastResponse) {

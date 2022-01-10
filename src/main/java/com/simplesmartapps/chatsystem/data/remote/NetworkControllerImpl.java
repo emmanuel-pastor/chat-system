@@ -1,5 +1,7 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
+import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
+import com.simplesmartapps.chatsystem.data.remote.exception.NetworkListingException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
@@ -47,7 +49,7 @@ public class NetworkControllerImpl implements NetworkController {
         List<BroadcastResponse> responseList = new ArrayList<>(Collections.emptyList());
         try (DatagramSocket serverSocket = new DatagramSocket(60418)) {
             serverSocket.setSoTimeout(timeout);
-            broadcast(message.toString());
+            sendBroadcast(message, 4445);
             try {
                 byte[] receiveData = new byte[1024];
                 while (true) {
@@ -68,24 +70,29 @@ public class NetworkControllerImpl implements NetworkController {
         return responseList;
     }
 
+    @Override
+    public void sendBroadcast(JSONObject message, int port) throws BroadcastException {
+        assert (mBroadcastAddress != null);
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            socket.setBroadcast(true);
+
+            byte[] buffer = message.toString().getBytes();
+
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, port);
+            socket.send(packet);
+            socket.close();
+        } catch (IOException e) {
+            throw new BroadcastException("Error while creating the socket", e);
+        }
+    }
+
     public void sendUDP(JSONObject message, InetAddress inetAddress, int port) throws IOException {
         DatagramSocket socket = new DatagramSocket();
 
         byte[] buffer = message.toString().getBytes();
 
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, inetAddress, port);
-        socket.send(packet);
-        socket.close();
-    }
-
-    private void broadcast(String broadcastMessage) throws IOException {
-        assert (mBroadcastAddress != null);
-        DatagramSocket socket = new DatagramSocket();
-        socket.setBroadcast(true);
-
-        byte[] buffer = broadcastMessage.getBytes();
-
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, 4445);
         socket.send(packet);
         socket.close();
     }

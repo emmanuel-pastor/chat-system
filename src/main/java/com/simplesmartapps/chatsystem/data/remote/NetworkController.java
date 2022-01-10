@@ -1,5 +1,7 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
+import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
+import com.simplesmartapps.chatsystem.data.remote.exception.NetworkListingException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
@@ -14,6 +16,8 @@ public interface NetworkController {
     String getLocalhostMacAddress() throws UnknownHostException, SocketException;
 
     List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException;
+
+    void sendBroadcast(JSONObject message, int port) throws BroadcastException;
 
     void sendUDP(JSONObject message, InetAddress inetAddress, int port) throws IOException;
 

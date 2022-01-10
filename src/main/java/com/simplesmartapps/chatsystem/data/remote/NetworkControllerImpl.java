@@ -1,6 +1,7 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class NetworkControllerImpl implements NetworkController {
     @Override
     public String getLocalhostMacAddress() throws UnknownHostException, SocketException {
         InetAddress localHost = InetAddress.getLocalHost();
-        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
+        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(mBroadcastAddress);
         byte[] hardwareAddress = networkInterface.getHardwareAddress();
 
         /* Format each byte in the array to a hexadecimal number using String#format. */
@@ -42,8 +43,8 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
-    public List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException {
-        List<JSONObject> responseList = new ArrayList<>(Collections.emptyList());
+    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException {
+        List<BroadcastResponse> responseList = new ArrayList<>(Collections.emptyList());
         try (DatagramSocket serverSocket = new DatagramSocket(60418)) {
             serverSocket.setSoTimeout(timeout);
             broadcast(message.toString());
@@ -54,7 +55,8 @@ public class NetworkControllerImpl implements NetworkController {
                     serverSocket.receive(receivePacket);
                     String jsonString = new String(receivePacket.getData());
                     JSONObject jsonResponse = new JSONObject(jsonString);
-                    responseList.add(jsonResponse);
+                    InetAddress address = receivePacket.getAddress();
+                    responseList.add(new BroadcastResponse(address, jsonResponse));
                 }
 
             } catch (SocketTimeoutException e) {

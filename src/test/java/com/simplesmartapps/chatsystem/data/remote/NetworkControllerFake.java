@@ -1,9 +1,12 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 public class NetworkControllerFake implements NetworkController {
@@ -17,7 +20,12 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
-    public List<JSONObject> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) {
+    public String getLocalhostMacAddress() {
+        return null;
+    }
+
+    @Override
+    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) {
         return null;
     }
 

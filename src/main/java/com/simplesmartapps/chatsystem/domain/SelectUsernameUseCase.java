@@ -5,6 +5,7 @@ import com.simplesmartapps.chatsystem.ChatSystemApplication;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.SelectUsernameException;
 import com.simplesmartapps.chatsystem.data.local.model.User;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
@@ -22,7 +23,7 @@ public class SelectUsernameUseCase {
 
     public boolean execute(String username) throws SelectUsernameException {
         try {
-            List<JSONObject> responseList = mNetworkController.sendBroadcastWithMultipleResponses(toJsonObjectRequest(), USERNAME_CHECK_TIMEOUT);
+            List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(toJsonObjectRequest(), USERNAME_CHECK_TIMEOUT);
             return !(responseList.stream().map(this::fromJsonObjectResponse).filter(user -> user.username().equals(ChatSystemApplication.username)).toArray().length > 0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,11 +37,12 @@ public class SelectUsernameUseCase {
         return baseObject;
     }
 
-    private User fromJsonObjectResponse(JSONObject response) {
+    private User fromJsonObjectResponse(BroadcastResponse broadcastResponse) {
         try {
-            String macAddress = response.getString("mac_address");
-            String username = response.getString("username");
-            InetAddress ipAddress = InetAddress.getByName(response.getString("ip_address"));
+            JSONObject jsonResponse = broadcastResponse.json();
+            String macAddress = jsonResponse.getString("mac_address");
+            String username = jsonResponse.getString("username");
+            InetAddress ipAddress = InetAddress.getByName(jsonResponse.getString("ip_address"));
             return new User(macAddress, username, true, ipAddress);
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,14 +3,13 @@ package com.simplesmartapps.chatsystem.data.local;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class RuntimeDataStoreImpl implements RuntimeDataStore {
     private static final RuntimeDataStore INSTANCE = new RuntimeDataStoreImpl();
 
     private String username = "";
-    private Set<User> usersSet = Collections.synchronizedSet(new HashSet<>());
+    private Set<User> usersSet = Collections.synchronizedSet(Collections.emptySet());
 
     private RuntimeDataStoreImpl() {
     }

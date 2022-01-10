@@ -9,7 +9,7 @@ public final class User {
     private final boolean isConnected;
     private final InetAddress ipAddress;
 
-    public User(String macAddress, String username, boolean isConnected, InetAddress ipAddress) {
+    public User(String macAddress, String username, InetAddress ipAddress, boolean isConnected) {
         this.macAddress = macAddress;
         this.username = username;
         this.isConnected = isConnected;

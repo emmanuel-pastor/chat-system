@@ -1,52 +1,61 @@
 package com.simplesmartapps.chatsystem.domain;
 
 import com.google.inject.Inject;
-import com.simplesmartapps.chatsystem.ChatSystemApplication;
+import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
+import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.SelectUsernameException;
-import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.simplesmartapps.chatsystem.Constants.USERNAME_CHECK_TIMEOUT;
 
 public class SelectUsernameUseCase {
     private final NetworkController mNetworkController;
+    private final RuntimeDataStore mRuntimeDataStore;
 
     @Inject
-    public SelectUsernameUseCase(NetworkController mNetworkController) {
-        this.mNetworkController = mNetworkController;
+    public SelectUsernameUseCase(NetworkController networkController, RuntimeDataStore runtimeDataStore) {
+        this.mNetworkController = networkController;
+        this.mRuntimeDataStore = runtimeDataStore;
     }
 
-    public boolean execute(String username) throws SelectUsernameException {
+    public boolean execute(String usernameCandidate) throws SelectUsernameException {
         try {
-            List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(toJsonObjectRequest(), USERNAME_CHECK_TIMEOUT);
-            return !(responseList.stream().map(this::fromJsonObjectResponse).filter(user -> user.username().equals(ChatSystemApplication.username)).toArray().length > 0);
+            List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), USERNAME_CHECK_TIMEOUT);
+
+            Set<User> usersSet = responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
+            boolean isUsernameValid = usersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
+
+            if (isUsernameValid) {
+                mRuntimeDataStore.writeUsername(usernameCandidate);
+                mRuntimeDataStore.writeUsersSet(usersSet);
+            }
+
+            return isUsernameValid;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new SelectUsernameException("A network error occurred while trying to validate the username", e);
         }
     }
 
-    private JSONObject toJsonObjectRequest() {
+    private JSONObject createUsernameValidationRequest() {
         JSONObject baseObject = new JSONObject();
         baseObject.put("type", "USERNAME_VALIDATION");
         return baseObject;
     }
 
-    private User fromJsonObjectResponse(BroadcastResponse broadcastResponse) {
-        try {
-            JSONObject jsonResponse = broadcastResponse.json();
-            String macAddress = jsonResponse.getString("mac_address");
-            String username = jsonResponse.getString("username");
-            InetAddress ipAddress = InetAddress.getByName(jsonResponse.getString("ip_address"));
-            return new User(macAddress, username, true, ipAddress);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    private User userFromBroadcastResponse(BroadcastResponse broadcastResponse) {
+        JSONObject jsonResponse = broadcastResponse.json();
+        String macAddress = jsonResponse.getString("mac_address");
+        String username = jsonResponse.getString("username");
+
+        InetAddress ipAddress = broadcastResponse.address();
+
+        return new User(macAddress, username, ipAddress, true);
     }
 }

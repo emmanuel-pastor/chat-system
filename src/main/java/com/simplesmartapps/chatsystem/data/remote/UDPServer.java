@@ -45,7 +45,7 @@ public class UDPServer implements Runnable {
         JSONObject jsonResponse = new JSONObject();
         String macAddress = mNetworkController.getLocalhostMacAddress();
         String ipAddress = InetAddress.getLocalHost().toString().split("/")[1];
-        String username = ChatSystemApplication.username;
+        String username = "Romain";
         jsonResponse.put("mac_address", macAddress);
         jsonResponse.put("username", username);
         jsonResponse.put("ip_address", ipAddress);

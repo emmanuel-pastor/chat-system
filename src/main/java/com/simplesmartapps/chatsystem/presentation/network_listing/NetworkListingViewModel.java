@@ -69,6 +69,7 @@ public class NetworkListingViewModel {
             if ("NetworkListingException".equals(exception.toString())) {
                 mErrorText.setValue("Could not load the available networks list");
             } else {
+                exception.printStackTrace();
                 mErrorText.setValue("An unexpected error occurred");
             }
             mSate.setValue(ViewState.ERROR);

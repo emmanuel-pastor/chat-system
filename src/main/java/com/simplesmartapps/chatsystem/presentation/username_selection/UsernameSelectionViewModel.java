@@ -1,7 +1,7 @@
 package com.simplesmartapps.chatsystem.presentation.username_selection;
 
 import com.google.inject.Inject;
-import com.simplesmartapps.chatsystem.domain.SelectUsernameUseCase;
+import com.simplesmartapps.chatsystem.domain.ConnectionUseCase;
 import com.simplesmartapps.chatsystem.presentation.network_listing.NetworkListingPage;
 import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
@@ -12,15 +12,15 @@ import static com.simplesmartapps.chatsystem.presentation.username_selection.Use
 import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
 
 public class UsernameSelectionViewModel {
-    private final SelectUsernameUseCase mSelectUsernameUseCase;
+    private final ConnectionUseCase mConnectionUseCase;
 
     public ObservableProperty<ViewState> mState = new ObservableProperty<>(READY);
     public ObservableProperty<String> mErrorText = new ObservableProperty<>("");
     public ObservableProperty<ValidityState> mIsValid = new ObservableProperty<>(UNKNOWN);
 
     @Inject
-    public UsernameSelectionViewModel(SelectUsernameUseCase mSelectUsernameUseCase) {
-        this.mSelectUsernameUseCase = mSelectUsernameUseCase;
+    public UsernameSelectionViewModel(ConnectionUseCase mConnectionUseCase) {
+        this.mConnectionUseCase = mConnectionUseCase;
     }
 
     public void onSubmitButtonClicked(String username) {
@@ -41,7 +41,7 @@ public class UsernameSelectionViewModel {
         Task<Boolean> task = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
-                return mSelectUsernameUseCase.execute(username.trim());
+                return mConnectionUseCase.execute(username.trim());
             }
         };
 
@@ -59,8 +59,11 @@ public class UsernameSelectionViewModel {
             Throwable exception = event.getSource().getException();
             if ("SelectUsernameException".equals(exception.toString())) {
                 mErrorText.setValue("Could not check username validity");
+            } else if ("ConnectionException".equals(exception.toString())) {
+                mErrorText.setValue("Could not connect to the system");
             } else {
                 mErrorText.setValue("An unexpected error occurred");
+                exception.printStackTrace();
             }
             mState.setValue(ERROR);
         });

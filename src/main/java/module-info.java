@@ -17,6 +17,7 @@ module com.simplesmartapps.chatsystem {
     opens com.simplesmartapps.chatsystem.presentation.username_selection;
     opens com.simplesmartapps.chatsystem.presentation.network_listing to javafx.fxml;
     exports com.simplesmartapps.chatsystem.data.local;
+    exports com.simplesmartapps.chatsystem.data.local.model;
     exports com.simplesmartapps.chatsystem.data.remote.model;
     exports com.simplesmartapps.chatsystem.data.remote.exception;
 }

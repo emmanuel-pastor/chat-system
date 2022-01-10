@@ -1,4 +1,4 @@
-package com.simplesmartapps.chatsystem.domain.model;
+package com.simplesmartapps.chatsystem.data.local.model;
 
 import java.net.InetAddress;
 import java.util.Objects;

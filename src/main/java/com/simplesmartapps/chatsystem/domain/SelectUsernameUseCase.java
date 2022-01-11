@@ -30,12 +30,15 @@ public class SelectUsernameUseCase {
         try {
             List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), UDP_SERVER_INPUT_PORT, USERNAME_CHECK_TIMEOUT);
 
-            Set<User> usersSet = responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
-            boolean isUsernameValid = usersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
+            Set<User> newUsersSet = responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
+            boolean isUsernameValid = newUsersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
 
             if (isUsernameValid) {
                 mRuntimeDataStore.writeUsername(usernameCandidate);
-                mRuntimeDataStore.writeUsersSet(usersSet);
+
+                Set<User> usersSet = mRuntimeDataStore.readUsersSet();
+                usersSet.addAll(newUsersSet);
+                mRuntimeDataStore.writeUsersSet(newUsersSet);
             }
 
             return isUsernameValid;

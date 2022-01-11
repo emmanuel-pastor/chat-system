@@ -1,56 +1,71 @@
 package com.simplesmartapps.chatsystem.data.remote;
 
 import com.google.inject.Inject;
-import com.simplesmartapps.chatsystem.ChatSystemApplication;
+import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
+import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.util.JsonUtil;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Set;
+
+import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
 public class UDPServer implements Runnable {
-    private final DatagramSocket mUsernameValidationSocket;
-    private final byte[] buffer = new byte[1024];
     private final NetworkController mNetworkController;
+    private final RuntimeDataStore mRuntimeDataStore;
 
     @Inject
-    public UDPServer(NetworkController networkController) throws SocketException {
+    public UDPServer(NetworkController networkController, RuntimeDataStore mRuntimeDataStore) {
         this.mNetworkController = networkController;
-        this.mUsernameValidationSocket = new DatagramSocket(4445);
+        this.mRuntimeDataStore = mRuntimeDataStore;
     }
 
     @Override
     public void run() {
-        Thread receive = new Thread("receive_thread") {
+        Thread receivingThread = new Thread("receiving_thread") {
             public void run() {
-                while (true) {
-                    try {
-                        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                        mUsernameValidationSocket.receive(packet);
-                        JSONObject packetData = JsonUtil.fromByteToJson(packet.getData());
-                        InetAddress packetAddress = packet.getAddress();
-                        JSONObject response = generateJSONResponse();
-                        mNetworkController.sendUDP(response, packetAddress, 60418);
-                        System.out.println("Packet sent to" + packet.getAddress());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try (DatagramSocket listeningSocket = new DatagramSocket(UDP_SERVER_INPUT_PORT)) {
+                    byte[] buffer = new byte[1024];
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    while (true) {
+                        try {
+                            listeningSocket.receive(packet);
+                            JSONObject packetData = JsonUtil.fromByteToJson(packet.getData());
+                            String type = packetData.getString("type");
+                            InetAddress packetAddress = packet.getAddress();
+
+                            if (type.equals("USERNAME_VALIDATION")) {
+                                JSONObject response = createUsernameValidationResponse();
+
+                                mNetworkController.sendUDP(response, packetAddress, 60418);
+                            } else if (type.equals("NEW_CONNECTION")) {
+                                String username = packetData.getString("username");
+                                String macAddress = packetData.getString("mac_address");
+                                User newUser = new User(macAddress, username, packetAddress, true);
+
+                                Set<User> usersSet = mRuntimeDataStore.readUsersSet();
+                                usersSet.add(newUser);
+                                mRuntimeDataStore.writeUsersSet(usersSet);
+                            }
+                        } catch (IOException e) {
+                            System.out.println("An error occurred with receiving data in the UDP server");
+                            e.printStackTrace();
+                        }
                     }
+                } catch (SocketException e) {
+                    System.out.println("Could not start the UDP server");
+                    e.printStackTrace();
                 }
             }
         };
-        receive.start();
+        receivingThread.start();
     }
 
-    public JSONObject generateJSONResponse() throws SocketException, UnknownHostException {
-        JSONObject jsonResponse = new JSONObject();
-        String macAddress = mNetworkController.getLocalhostMacAddress();
-        String ipAddress = InetAddress.getLocalHost().toString().split("/")[1];
-        String username = "Romain";
-        jsonResponse.put("mac_address", macAddress);
-        jsonResponse.put("username", username);
-        jsonResponse.put("ip_address", ipAddress);
-        return jsonResponse;
+    private JSONObject createUsernameValidationResponse() {
+        String macAddress = mNetworkController.getMacAddress();
+        String username = mRuntimeDataStore.readUsername();
+        return new JSONObject().put("username", username).put("mac_address", macAddress);
     }
-
-
 }

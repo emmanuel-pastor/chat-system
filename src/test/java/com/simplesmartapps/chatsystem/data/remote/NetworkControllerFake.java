@@ -20,12 +20,12 @@ public class NetworkControllerFake implements NetworkController {
     }
 
     @Override
-    public String getLocalhostMacAddress() {
+    public String getMacAddress() {
         return null;
     }
 
     @Override
-    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) {
+    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int destinationPort, int timeout) {
         return null;
     }
 
@@ -40,11 +40,11 @@ public class NetworkControllerFake implements NetworkController {
     @Override
     public List<BroadcastNetwork> listAvailableNetworks() {
         InetAddress fakeAddress = InetAddress.getLoopbackAddress();
-        return List.of(new BroadcastNetwork(fakeAddress, "Loopback network interface"));
+        return List.of(new BroadcastNetwork(fakeAddress, "Loopback network interface", new byte[]{}));
     }
 
     @Override
-    public void setBroadcastAddress(InetAddress broadcastAddress) {
+    public void setBroadcastNetwork(BroadcastNetwork broadcastAddress) {
 
     }
 }

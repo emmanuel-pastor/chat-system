@@ -30,7 +30,7 @@ public class NetworkListingViewModel {
     }
 
     public void onListItemClicked(int indexInList) {
-        InetAddress selectedNetwork = mAvailableNetworksList.getValue().get(indexInList).address();
+        BroadcastNetwork selectedNetwork = mAvailableNetworksList.getValue().get(indexInList);
         mSelectNetworkUseCase.execute(selectedNetwork);
 
         cleanupObservers();

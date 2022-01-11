@@ -24,19 +24,19 @@ public class ConnectionUseCase {
 
     public boolean execute(String usernameCandidate) throws SelectUsernameException, ConnectionException {
         boolean isUsernameValid = mSelectUsernameUseCase.execute(usernameCandidate);
-         if (isUsernameValid) {
-             try {
-                 mNetworkController.sendBroadcast(createNewConnectionRequest(), UDP_SERVER_INPUT_PORT);
-             } catch (BroadcastException e) {
-                 throw new ConnectionException("Could not send connection broadcast", e);
-             }
-             mUdpServer.run();
-         }
-         return isUsernameValid;
+        if (isUsernameValid) {
+            try {
+                mNetworkController.sendBroadcast(createNewConnectionRequest(usernameCandidate), UDP_SERVER_INPUT_PORT);
+            } catch (BroadcastException e) {
+                throw new ConnectionException("Could not send connection broadcast", e);
+            }
+            mUdpServer.run();
+        }
+        return isUsernameValid;
     }
 
-    private JSONObject createNewConnectionRequest() {
-        JSONObject baseObject = new JSONObject();
-        return baseObject.put("type", "NEW_CONNECTION");
+    private JSONObject createNewConnectionRequest(String username) {
+        String macAddress = mNetworkController.getMacAddress();
+        return new JSONObject().put("type", "NEW_CONNECTION").put("username", username).put("mac_address", macAddress);
     }
 }

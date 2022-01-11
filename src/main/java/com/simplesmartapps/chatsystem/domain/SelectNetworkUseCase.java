@@ -2,8 +2,7 @@ package com.simplesmartapps.chatsystem.domain;
 
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
-
-import java.net.InetAddress;
+import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 
 public class SelectNetworkUseCase {
     private final NetworkController mNetworkController;
@@ -13,7 +12,7 @@ public class SelectNetworkUseCase {
         this.mNetworkController = networkController;
     }
 
-    public void execute(InetAddress selectedNetwork) {
-        mNetworkController.setBroadcastAddress(selectedNetwork);
+    public void execute(BroadcastNetwork selectedNetwork) {
+        mNetworkController.setBroadcastNetwork(selectedNetwork);
     }
 }

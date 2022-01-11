@@ -8,14 +8,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 public class NetworkControllerImpl implements NetworkController {
     private static final NetworkController INSTANCE = new NetworkControllerImpl();
-    private InetAddress mBroadcastAddress;
+    private BroadcastNetwork mBroadcastNetwork;
 
     private NetworkControllerImpl() {
     }
@@ -25,39 +22,35 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
-    public void setBroadcastAddress(InetAddress broadcastAddress) {
-        this.mBroadcastAddress = broadcastAddress;
+    public void setBroadcastNetwork(BroadcastNetwork broadcastNetwork) {
+        this.mBroadcastNetwork = broadcastNetwork;
     }
 
     @Override
-    public String getLocalhostMacAddress() throws UnknownHostException, SocketException {
-        InetAddress localHost = InetAddress.getLocalHost();
-        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(mBroadcastAddress);
-        byte[] hardwareAddress = networkInterface.getHardwareAddress();
-
+    public String getMacAddress() {
         /* Format each byte in the array to a hexadecimal number using String#format. */
+        byte[] hardwareAddress = mBroadcastNetwork.macAddress();
         String[] hexadecimal = new String[hardwareAddress.length];
         for (int i = 0; i < hardwareAddress.length; i++) {
             hexadecimal[i] = String.format("%02X", hardwareAddress[i]);
         }
-
         return String.join("-", hexadecimal);
     }
 
     @Override
-    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int timeout) throws BroadcastException {
+    public List<BroadcastResponse> sendBroadcastWithMultipleResponses(JSONObject message, int destinationPort, int timeout) throws BroadcastException {
         List<BroadcastResponse> responseList = new ArrayList<>(Collections.emptyList());
-        try (DatagramSocket serverSocket = new DatagramSocket(60418)) {
-            serverSocket.setSoTimeout(timeout);
-            sendBroadcast(message, 4445);
+        try (DatagramSocket listeningSocket = new DatagramSocket(60418)) {
+            listeningSocket.setSoTimeout(timeout);
+            sendBroadcast(message, destinationPort);
             try {
-                byte[] receiveData = new byte[1024];
+                byte[] receivedData = new byte[1024];
                 while (true) {
-                    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                    serverSocket.receive(receivePacket);
-                    String jsonString = new String(receivePacket.getData());
+                    DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
+                    listeningSocket.receive(receivedPacket);
+                    String jsonString = new String(receivedPacket.getData());
                     JSONObject jsonResponse = new JSONObject(jsonString);
-                    InetAddress address = receivePacket.getAddress();
+                    InetAddress address = receivedPacket.getAddress();
                     responseList.add(new BroadcastResponse(address, jsonResponse));
                 }
 
@@ -71,17 +64,15 @@ public class NetworkControllerImpl implements NetworkController {
     }
 
     @Override
-    public void sendBroadcast(JSONObject message, int port) throws BroadcastException {
-        assert (mBroadcastAddress != null);
-        try {
-            DatagramSocket socket = new DatagramSocket();
+    public void sendBroadcast(JSONObject message, int destinationPort) throws BroadcastException {
+        assert (mBroadcastNetwork != null);
+        try (DatagramSocket socket = new DatagramSocket()) {
             socket.setBroadcast(true);
 
             byte[] buffer = message.toString().getBytes();
 
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastAddress, port);
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastNetwork.address(), destinationPort);
             socket.send(packet);
-            socket.close();
         } catch (IOException e) {
             throw new BroadcastException("Error while creating the socket", e);
         }
@@ -111,8 +102,9 @@ public class NetworkControllerImpl implements NetworkController {
                     continue;
                 }
 
+                byte[] hardwareAddress = networkInterface.getHardwareAddress();
                 networkInterface.getInterfaceAddresses().stream()
-                        .map(interfaceAddress -> new BroadcastNetwork(interfaceAddress.getBroadcast(), displayName))
+                        .map(interfaceAddress -> new BroadcastNetwork(interfaceAddress.getBroadcast(), displayName, hardwareAddress))
                         .filter(network -> network.address() != null)
                         .forEach(broadcastNetworks::add);
             }

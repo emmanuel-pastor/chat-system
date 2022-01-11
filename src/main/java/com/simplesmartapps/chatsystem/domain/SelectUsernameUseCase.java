@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 import static com.simplesmartapps.chatsystem.Constants.USERNAME_CHECK_TIMEOUT;
 
 public class SelectUsernameUseCase {
@@ -27,7 +28,7 @@ public class SelectUsernameUseCase {
 
     public boolean execute(String usernameCandidate) throws SelectUsernameException {
         try {
-            List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), USERNAME_CHECK_TIMEOUT);
+            List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), UDP_SERVER_INPUT_PORT, USERNAME_CHECK_TIMEOUT);
 
             Set<User> usersSet = responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
             boolean isUsernameValid = usersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
@@ -44,8 +45,7 @@ public class SelectUsernameUseCase {
     }
 
     private JSONObject createUsernameValidationRequest() {
-        JSONObject baseObject = new JSONObject();
-        return baseObject.put("type", "USERNAME_VALIDATION");
+        return new JSONObject().put("type", "USERNAME_VALIDATION");
     }
 
     private User userFromBroadcastResponse(BroadcastResponse broadcastResponse) {

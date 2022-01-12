@@ -8,7 +8,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 public class NetworkControllerImpl implements NetworkController {
     private static final NetworkController INSTANCE = new NetworkControllerImpl();
@@ -69,7 +73,7 @@ public class NetworkControllerImpl implements NetworkController {
         try (DatagramSocket socket = new DatagramSocket()) {
             socket.setBroadcast(true);
 
-            byte[] buffer = message.toString().getBytes();
+            byte[] buffer = message.toString().getBytes(StandardCharsets.UTF_8);
 
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mBroadcastNetwork.address(), destinationPort);
             socket.send(packet);
@@ -81,7 +85,7 @@ public class NetworkControllerImpl implements NetworkController {
     public void sendUDP(JSONObject message, InetAddress inetAddress, int port) throws IOException {
         DatagramSocket socket = new DatagramSocket();
 
-        byte[] buffer = message.toString().getBytes();
+        byte[] buffer = message.toString().getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, inetAddress, port);
         socket.send(packet);

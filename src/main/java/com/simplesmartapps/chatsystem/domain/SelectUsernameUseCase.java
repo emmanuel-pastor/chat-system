@@ -9,6 +9,7 @@ import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,15 +30,14 @@ public class SelectUsernameUseCase {
     public boolean execute(String usernameCandidate) throws SelectUsernameException {
         try {
             List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), UDP_SERVER_INPUT_PORT, USERNAME_CHECK_TIMEOUT);
-
-            Set<User> newUsersSet = responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
+            HashSet<User> newUsersSet = (HashSet<User>) responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
             boolean isUsernameValid = newUsersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
 
             if (isUsernameValid) {
                 mRuntimeDataStore.writeUsername(usernameCandidate);
 
                 Set<User> usersSet = mRuntimeDataStore.readUsersSet();
-                usersSet.addAll(newUsersSet);
+                newUsersSet.addAll(usersSet);
                 mRuntimeDataStore.writeUsersSet(newUsersSet);
             }
 

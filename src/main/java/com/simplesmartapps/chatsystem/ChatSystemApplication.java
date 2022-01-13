@@ -2,7 +2,6 @@ package com.simplesmartapps.chatsystem;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.simplesmartapps.chatsystem.data.remote.UDPServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,7 +15,7 @@ public class ChatSystemApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        injector = Guice.createInjector(new CoreModule());
+        injector = Guice.createInjector(new CoreDIModule());
         appStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("presentation/network_listing/network_listing_page-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 860, 550);

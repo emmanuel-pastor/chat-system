@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<SplitPane dividerPositions="0.5" minHeight="550.0" minWidth="860.0" xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage">
+    <VBox alignment="CENTER">
+        <ListView fx:id="usersListView" prefHeight="550.0"/>
+    </VBox>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"/>
+</SplitPane>

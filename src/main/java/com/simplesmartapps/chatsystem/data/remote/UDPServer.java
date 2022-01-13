@@ -4,11 +4,16 @@ import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.util.JsonUtil;
+import javafx.application.Platform;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.util.HashSet;
+import java.util.List;
 
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
@@ -24,7 +29,7 @@ public class UDPServer implements Runnable {
 
     @Override
     public void run() {
-        Thread receivingThread = new Thread("receiving_thread") {
+        Thread receivingThread = new Thread("udp_server_thread") {
             public void run() {
                 try (DatagramSocket listeningSocket = new DatagramSocket(UDP_SERVER_INPUT_PORT)) {
                     byte[] buffer = new byte[1024];
@@ -45,7 +50,7 @@ public class UDPServer implements Runnable {
                                 String macAddress = packetData.getString("mac_address");
                                 User newUser = new User(macAddress, username, packetAddress, true);
 
-                                mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
+                                Platform.runLater(() -> mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser))));
                             }
                         } catch (IOException e) {
                             System.out.println("An error occurred with receiving data in the UDP server");

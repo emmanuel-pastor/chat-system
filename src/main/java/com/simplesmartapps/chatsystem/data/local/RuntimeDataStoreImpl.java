@@ -40,7 +40,8 @@ public class RuntimeDataStoreImpl implements RuntimeDataStore {
     }
 
     @Override
-    public void removeUser(String macAddress) {
-        usersSet.removeIf(user -> user.macAddress().equals(macAddress));
+    public void modifyUser(User modifiedUser) {
+        usersSet.removeIf(user -> user.macAddress().equals(modifiedUser.macAddress()));
+        usersSet.add(modifiedUser);
     }
 }

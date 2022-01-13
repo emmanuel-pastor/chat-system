@@ -12,5 +12,6 @@ public interface RuntimeDataStore {
     ObservableSet<User> readUsersSet();
 
     void addAllUsers(Set<User> newSet);
-    void removeUser(String macAddress);
+
+    void modifyUser(User modifiedUser);
 }

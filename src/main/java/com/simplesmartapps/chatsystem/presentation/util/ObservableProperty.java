@@ -2,21 +2,22 @@ package com.simplesmartapps.chatsystem.presentation.util;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class ObservableProperty<T> {
-    private final HashMap<Object, Consumer<T>> mObservers = new HashMap<>(Collections.emptyMap());
-    private T mValue;
+    private final Map<Object, Consumer<T>> mObservers = Collections.synchronizedMap(new HashMap<>());
+    private volatile T mValue;
 
     public ObservableProperty(T initialValue) {
         this.mValue = initialValue;
     }
 
-    public T getValue() {
+    public synchronized T getValue() {
         return this.mValue;
     }
 
-    public void setValue(T newValue) {
+    public synchronized void setValue(T newValue) {
         this.mValue = newValue;
         mObservers.forEach(
                 (observer, callback) -> callback.accept(newValue)

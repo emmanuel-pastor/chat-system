@@ -2,7 +2,6 @@ package com.simplesmartapps.chatsystem;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.simplesmartapps.chatsystem.data.remote.UDPServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

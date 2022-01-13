@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.simplesmartapps.chatsystem.presentation.messaging_page.MessagingPage"
+            minHeight="550.0" minWidth="860.0">
+
+</AnchorPane>

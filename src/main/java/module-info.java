@@ -14,8 +14,10 @@ module com.simplesmartapps.chatsystem {
     exports com.simplesmartapps.chatsystem.domain;
     exports com.simplesmartapps.chatsystem.presentation.util;
     exports com.simplesmartapps.chatsystem.presentation.network_listing;
+    exports com.simplesmartapps.chatsystem.presentation.messaging_page;
     opens com.simplesmartapps.chatsystem.presentation.username_selection;
     opens com.simplesmartapps.chatsystem.presentation.network_listing to javafx.fxml;
+    opens com.simplesmartapps.chatsystem.presentation.messaging_page to javafx.fxml;
     exports com.simplesmartapps.chatsystem.data.local;
     exports com.simplesmartapps.chatsystem.data.local.model;
     exports com.simplesmartapps.chatsystem.data.remote.model;

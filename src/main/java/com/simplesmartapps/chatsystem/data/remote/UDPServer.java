@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Set;
+import java.util.*;
 
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
@@ -45,9 +45,7 @@ public class UDPServer implements Runnable {
                                 String macAddress = packetData.getString("mac_address");
                                 User newUser = new User(macAddress, username, packetAddress, true);
 
-                                Set<User> usersSet = mRuntimeDataStore.readUsersSet();
-                                usersSet.add(newUser);
-                                mRuntimeDataStore.writeUsersSet(usersSet);
+                                mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
                             }
                         } catch (IOException e) {
                             System.out.println("An error occurred with receiving data in the UDP server");

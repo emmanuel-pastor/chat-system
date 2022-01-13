@@ -35,10 +35,7 @@ public class SelectUsernameUseCase {
 
             if (isUsernameValid) {
                 mRuntimeDataStore.writeUsername(usernameCandidate);
-
-                Set<User> usersSet = mRuntimeDataStore.readUsersSet();
-                newUsersSet.addAll(usersSet);
-                mRuntimeDataStore.writeUsersSet(newUsersSet);
+                mRuntimeDataStore.addAllUsers(newUsersSet);
             }
 
             return isUsernameValid;

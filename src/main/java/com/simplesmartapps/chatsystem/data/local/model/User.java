@@ -45,7 +45,7 @@ public final class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(macAddress, username, isConnected, ipAddress);
+        return Objects.hash(macAddress);
     }
 
     @Override

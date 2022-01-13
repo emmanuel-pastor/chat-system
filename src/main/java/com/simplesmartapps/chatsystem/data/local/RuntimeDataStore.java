@@ -9,5 +9,6 @@ public interface RuntimeDataStore {
     void writeUsername(String newUsername);
 
     Set<User> readUsersSet();
-    void writeUsersSet(Set<User> newSet);
+    void addAllUsers(Set<User> newSet);
+    void removeUser(String macAddress);
 }

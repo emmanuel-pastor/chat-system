@@ -2,7 +2,7 @@ package com.simplesmartapps.chatsystem.presentation.username_selection;
 
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.domain.ConnectionUseCase;
-import com.simplesmartapps.chatsystem.presentation.messaging_page.MessagingPage;
+import com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage;
 import com.simplesmartapps.chatsystem.presentation.network_listing.NetworkListingPage;
 import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;

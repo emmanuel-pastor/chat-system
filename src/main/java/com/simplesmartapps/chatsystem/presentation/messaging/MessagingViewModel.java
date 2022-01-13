@@ -1,4 +1,4 @@
-package com.simplesmartapps.chatsystem.presentation.messaging_page;
+package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.model.User;

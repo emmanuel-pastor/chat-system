@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.NetworkControllerFake;
 
-public class CoreTestModule extends AbstractModule {
+public class CoreTestDIModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(NetworkController.class).toInstance(NetworkControllerFake.getInstance());

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <SplitPane dividerPositions="0.3" minHeight="550.0" minWidth="860.0" xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.simplesmartapps.chatsystem.presentation.messaging_page.MessagingPage">
+           fx:controller="com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage">
     <VBox alignment="CENTER">
         <ListView fx:id="usersListView"/>
     </VBox>

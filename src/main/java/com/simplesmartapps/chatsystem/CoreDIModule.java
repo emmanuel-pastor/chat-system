@@ -6,7 +6,7 @@ import com.simplesmartapps.chatsystem.data.local.RuntimeDataStoreImpl;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.NetworkControllerImpl;
 
-public class CoreModule extends AbstractModule {
+public class CoreDIModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(NetworkController.class).toInstance(NetworkControllerImpl.getInstance());

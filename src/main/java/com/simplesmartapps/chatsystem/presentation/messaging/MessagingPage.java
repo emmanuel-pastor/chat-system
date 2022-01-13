@@ -8,6 +8,7 @@ import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class MessagingPage implements Initializable {
         mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> {
             updateListView(change.getSet());
         });
+        usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        usersListView.setCellFactory(listView -> new UsersListCell());
     }
 
     private void updateListView(ObservableSet<? extends User> usersSet) {

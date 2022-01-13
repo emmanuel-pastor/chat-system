@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.*?>
+<GridPane fx:id="gridPane" hgap="24.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+          vgap="8.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="NEVER"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="10.0" left="25.0" right="25.0" top="10.0"/>
+    </padding>
+    <Circle fx:id="statusCircle" fill="#38b22b" radius="24.0" stroke="BLACK" strokeType="INSIDE"
+            GridPane.rowSpan="2147483647"/>
+    <Text fx:id="usernameInitialTextView" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER"
+          GridPane.rowSpan="2147483647">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Text>
+    <Text fx:id="usernameTextView" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+          GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+        <font>
+            <Font size="15.0"/>
+        </font>
+    </Text>
+    <Text fx:id="lastMessageTextView" strokeType="OUTSIDE" strokeWidth="0.0" text="Voici le dernier message envoyé"
+          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <cursor>
+        <Cursor fx:constant="HAND"/>
+    </cursor>
+</GridPane>

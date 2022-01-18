@@ -18,14 +18,21 @@ public class TCPClient {
     }
 
     public String sendMessage(String msg) throws IOException {
+
         out.println(msg);
-        String resp = in.readLine();
-        return resp;
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
     public void stopConnection() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
     }
+
 }

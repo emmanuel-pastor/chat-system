@@ -10,27 +10,25 @@ import java.net.Socket;
 public class TCPServer {
     private ServerSocket serverSocket;
 
-    public void start(int port) throws IOException {
-        Thread receivingStartThread = new Thread() {
-            public void run() {
-                try {
-                    serverSocket = new
+    public void start(int port) {
+        Thread receivingStartThread = new Thread(() -> {
+            try {
+                serverSocket = new
 
-                            ServerSocket(port);
+                        ServerSocket(port);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            while (true) {
+                try {
+                    new
+
+                            EchoClientHandler(serverSocket.accept()).start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                while (true) {
-                    try {
-                        new
-
-                                EchoClientHandler(serverSocket.accept());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
-        };
+        });
         receivingStartThread.start();
     }
 
@@ -38,7 +36,7 @@ public class TCPServer {
         serverSocket.close();
     }
 
-    public static class EchoClientHandler implements Runnable {
+    public static class EchoClientHandler extends Thread {
         private Socket clientSocket;
         private PrintWriter out;
         private BufferedReader in;
@@ -47,14 +45,9 @@ public class TCPServer {
             this.clientSocket = socket;
         }
 
-        @Override
         public void run() {
             try {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 in = new BufferedReader(
                         new InputStreamReader(clientSocket.getInputStream()));
             } catch (IOException e) {
@@ -64,6 +57,7 @@ public class TCPServer {
             String inputLine;
             try {
                 while ((inputLine = in.readLine()) != null) {
+                    System.out.println(inputLine);
                     if (".".equals(inputLine)) {
                         out.println("bye");
                         break;

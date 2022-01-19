@@ -23,4 +23,5 @@ module com.simplesmartapps.chatsystem {
     exports com.simplesmartapps.chatsystem.data.remote.model;
     exports com.simplesmartapps.chatsystem.data.remote.exception;
     exports com.simplesmartapps.chatsystem.domain.udp_server_use_case;
+    exports com.simplesmartapps.chatsystem.domain.exception;
 }

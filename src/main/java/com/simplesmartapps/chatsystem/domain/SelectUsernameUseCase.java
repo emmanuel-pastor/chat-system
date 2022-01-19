@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
-import com.simplesmartapps.chatsystem.data.remote.exception.SelectUsernameException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastResponse;
+import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import org.json.JSONObject;
 
 import java.net.InetAddress;

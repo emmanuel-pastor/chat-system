@@ -1,4 +1,4 @@
-package com.simplesmartapps.chatsystem.data.remote.exception;
+package com.simplesmartapps.chatsystem.domain.exception;
 
 public class ConnectionException extends Exception {
     public ConnectionException(String message, Throwable error) {

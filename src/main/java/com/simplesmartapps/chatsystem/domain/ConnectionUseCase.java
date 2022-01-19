@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.UDPServer;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
-import com.simplesmartapps.chatsystem.data.remote.exception.ConnectionException;
-import com.simplesmartapps.chatsystem.data.remote.exception.SelectUsernameException;
+import com.simplesmartapps.chatsystem.domain.exception.ConnectionException;
+import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import org.json.JSONObject;
 
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;

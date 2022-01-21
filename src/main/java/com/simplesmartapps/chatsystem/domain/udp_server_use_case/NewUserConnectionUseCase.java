@@ -3,19 +3,24 @@ package com.simplesmartapps.chatsystem.domain.udp_server_use_case;
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
+import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 
 import java.util.HashSet;
 import java.util.List;
 
 public class NewUserConnectionUseCase {
     private final RuntimeDataStore mRuntimeDataStore;
+    private final NetworkController mNetworkController;
 
     @Inject
-    public NewUserConnectionUseCase(RuntimeDataStore runtimeDataStore) {
+    public NewUserConnectionUseCase(RuntimeDataStore runtimeDataStore, NetworkController mNetworkController) {
         this.mRuntimeDataStore = runtimeDataStore;
+        this.mNetworkController = mNetworkController;
     }
 
     public void execute(User newUser) {
-        mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
+        if (!mNetworkController.getMacAddress().equals(newUser.macAddress())) {
+            mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
+        }
     }
 }

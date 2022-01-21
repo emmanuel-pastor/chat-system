@@ -29,28 +29,30 @@ public class TCPServer {
     public void start() throws IOException {
         mServerSocket = new ServerSocket(TCP_SERVER_INPUT_PORT);
 
-        Thread serverThread = new Thread(() -> {
-            try {
-                while (true) {
-                    Socket clientSocket = mServerSocket.accept();
+        Thread serverThread = new Thread("tcp_server_thread") {
+            public void run() {
+                try {
+                    while (true) {
+                        Socket clientSocket = mServerSocket.accept();
 
-                    JSONObject firstMessage = readFirstMessage(clientSocket);
-                    String userId = firstMessage.getString("mac_address");
-                    String remoteUsername = firstMessage.getString("username");
-                    InetAddress sourceIpAddress = clientSocket.getInetAddress();
-                    String messageContent = firstMessage.getString("content");
+                        JSONObject firstMessage = readFirstMessage(clientSocket);
+                        String userId = firstMessage.getString("mac_address");
+                        String remoteUsername = firstMessage.getString("username");
+                        InetAddress sourceIpAddress = clientSocket.getInetAddress();
+                        String messageContent = firstMessage.getString("content");
 
-                    mRuntimeDataStore.addOpenSocket(userId, clientSocket);
-                    updateUsersSetIfNeeded(userId, remoteUsername, sourceIpAddress);
-                    // Start a TCPConnectionHandler to communicate with the remote user
-                    ChatSystemApplication.injector.getInstance(TCPConnectionHandler.class).start(clientSocket, userId);
-                    //TODO: Add message to DB
-                    System.out.println(remoteUsername + " says: " + messageContent);
+                        mRuntimeDataStore.addOpenSocket(userId, clientSocket);
+                        updateUsersSetIfNeeded(userId, remoteUsername, sourceIpAddress);
+                        // Start a TCPConnectionHandler to communicate with the remote user
+                        ChatSystemApplication.injector.getInstance(TCPConnectionHandler.class).start(clientSocket, userId);
+                        //TODO: Add message to DB
+                        System.out.println(remoteUsername + " says: " + messageContent);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        });
+        };
         serverThread.start();
     }
 

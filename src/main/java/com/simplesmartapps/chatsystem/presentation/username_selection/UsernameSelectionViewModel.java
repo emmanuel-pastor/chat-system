@@ -2,6 +2,8 @@ package com.simplesmartapps.chatsystem.presentation.username_selection;
 
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.domain.ConnectionUseCase;
+import com.simplesmartapps.chatsystem.domain.exception.ConnectionException;
+import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage;
 import com.simplesmartapps.chatsystem.presentation.network_listing.NetworkListingPage;
 import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
@@ -60,9 +62,9 @@ public class UsernameSelectionViewModel {
 
         task.setOnFailed(event -> {
             Throwable exception = event.getSource().getException();
-            if ("SelectUsernameException".equals(exception.toString())) {
+            if (SelectUsernameException.class.equals(exception.getClass())) {
                 mErrorText.setValue("Could not check username validity");
-            } else if ("ConnectionException".equals(exception.toString())) {
+            } else if (ConnectionException.class.equals(exception.getClass())) {
                 mErrorText.setValue("Could not connect to the system");
             } else {
                 mErrorText.setValue("An unexpected error occurred");

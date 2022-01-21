@@ -31,17 +31,19 @@ public class ConnectionUseCase {
         boolean isUsernameValid = mSelectUsernameUseCase.execute(usernameCandidate);
         if (isUsernameValid) {
             try {
-                mNetworkController.sendBroadcast(createNewConnectionRequest(usernameCandidate), UDP_SERVER_INPUT_PORT);
-            } catch (BroadcastException e) {
-                throw new ConnectionException("Could not send connection broadcast", e);
-            }
-
-            mUdpServer.run();
-
-            try {
+                mUdpServer.start();
                 mTCPServer.start();
             } catch (IOException e) {
-                throw new ConnectionException("Could not start TCP server", e);
+                mUdpServer.stop();
+                throw new ConnectionException("Could not start servers", e);
+            }
+
+            try {
+                mNetworkController.sendBroadcast(createNewConnectionRequest(usernameCandidate), UDP_SERVER_INPUT_PORT);
+            } catch (BroadcastException e) {
+                mUdpServer.stop();
+                mTCPServer.stop();
+                throw new ConnectionException("Could not send connection broadcast", e);
             }
         }
         return isUsernameValid;

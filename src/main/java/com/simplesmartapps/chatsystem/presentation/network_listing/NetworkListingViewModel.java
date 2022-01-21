@@ -1,6 +1,7 @@
 package com.simplesmartapps.chatsystem.presentation.network_listing;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.data.remote.exception.NetworkListingException;
 import com.simplesmartapps.chatsystem.data.remote.model.BroadcastNetwork;
 import com.simplesmartapps.chatsystem.domain.ListAvailableNetworksUseCase;
 import com.simplesmartapps.chatsystem.domain.SelectNetworkUseCase;
@@ -10,7 +11,6 @@ import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.concurrent.Task;
 
-import java.net.InetAddress;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class NetworkListingViewModel {
 
         task.setOnFailed(event -> {
             Throwable exception = event.getSource().getException();
-            if ("NetworkListingException".equals(exception.toString())) {
+            if (NetworkListingException.class.equals(exception.getClass())) {
                 mErrorText.setValue("Could not load the available networks list");
             } else {
                 exception.printStackTrace();

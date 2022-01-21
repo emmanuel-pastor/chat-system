@@ -15,9 +15,10 @@ import java.net.SocketException;
 
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
-public class UDPServer implements Runnable {
+public class UDPServer {
     private final UsernameValidationUseCase mUsernameValidationUseCase;
     private final NewUserConnectionUseCase mNewUserConnectionUseCase;
+    DatagramSocket listeningSocket;
 
     @Inject
     public UDPServer(UsernameValidationUseCase usernameValidationUseCase, NewUserConnectionUseCase newUserConnectionUseCase) {
@@ -25,40 +26,41 @@ public class UDPServer implements Runnable {
         this.mNewUserConnectionUseCase = newUserConnectionUseCase;
     }
 
-    @Override
-    public void run() {
+    public void start() throws SocketException {
+        listeningSocket = new DatagramSocket(UDP_SERVER_INPUT_PORT);
+
         Thread receivingThread = new Thread("udp_server_thread") {
             public void run() {
-                try (DatagramSocket listeningSocket = new DatagramSocket(UDP_SERVER_INPUT_PORT)) {
+                try {
                     byte[] buffer = new byte[1024];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     while (true) {
-                        try {
-                            listeningSocket.receive(packet);
-                            JSONObject packetData = JsonUtil.fromByteToJson(packet.getData());
-                            String type = packetData.getString("type");
-                            InetAddress packetAddress = packet.getAddress();
+                        listeningSocket.receive(packet);
+                        JSONObject packetData = JsonUtil.fromByteToJson(packet.getData());
+                        String type = packetData.getString("type");
+                        InetAddress packetAddress = packet.getAddress();
 
-                            if (type.equals("USERNAME_VALIDATION")) {
-                                mUsernameValidationUseCase.execute(packetAddress);
-                            } else if (type.equals("NEW_CONNECTION")) {
-                                String username = packetData.getString("username");
-                                String macAddress = packetData.getString("mac_address");
-                                User newUser = new User(macAddress, username, packetAddress, true);
+                        if (type.equals("USERNAME_VALIDATION")) {
+                            mUsernameValidationUseCase.execute(packetAddress);
+                        } else if (type.equals("NEW_CONNECTION")) {
+                            String username = packetData.getString("username");
+                            String macAddress = packetData.getString("mac_address");
+                            User newUser = new User(macAddress, username, packetAddress, true);
 
-                                mNewUserConnectionUseCase.execute(newUser);
-                            }
-                        } catch (IOException e) {
-                            System.out.println("An error occurred with receiving or sending data in the UDP server");
-                            e.printStackTrace();
+                            mNewUserConnectionUseCase.execute(newUser);
                         }
                     }
-                } catch (SocketException e) {
-                    System.out.println("Could not start the UDP server");
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
         receivingThread.start();
+    }
+
+    public void stop() {
+        if (listeningSocket != null) {
+            listeningSocket.close();
+        }
     }
 }

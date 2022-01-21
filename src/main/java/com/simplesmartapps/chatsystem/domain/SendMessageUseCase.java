@@ -1,6 +1,8 @@
 package com.simplesmartapps.chatsystem.domain;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.ChatSystemApplication;
+import com.simplesmartapps.chatsystem.TCPConnectionHandler;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
@@ -31,17 +33,28 @@ public class SendMessageUseCase {
         boolean isSocketOpened = openedSockets.containsKey(destinationUserId);
         JSONObject jsonMessage = createJSONMessage(message);
 
-        try {
-            Socket socket;
-            if (isSocketOpened) {
-                socket = openedSockets.get(destinationUserId);
-            } else {
-                socket = new Socket(destinationUser.ipAddress(), TCP_SERVER_INPUT_PORT);
-                mRuntimeDataStore.addOpenSocket(destinationUserId, socket);
+        if (isSocketOpened) {
+            try {
+                sendMessage(jsonMessage, openedSockets.get(destinationUserId));
+                //TODO: Add message to DB
+            } catch (IOException e) {
+                mRuntimeDataStore.removeOpenSocket(destinationUserId);
+                mRuntimeDataStore.setUserConnectionStatus(destinationUserId, false);
+                throw new SendMessageException("Could not send message through previously opened socket", e);
             }
-            sendMessage(jsonMessage, socket);
-        } catch (IOException e) {
-            throw new SendMessageException(e.getMessage(), e);
+        } else {
+            try {
+                Socket socket = new Socket(destinationUser.ipAddress(), TCP_SERVER_INPUT_PORT);
+                sendMessage(jsonMessage, openedSockets.get(destinationUserId));
+
+                //TODO: Add message to DB
+                mRuntimeDataStore.addOpenSocket(destinationUserId, socket);
+                // Start a TCPConnectionHandler to communicate with the remote user
+                ChatSystemApplication.injector.getInstance(TCPConnectionHandler.class).start(socket, destinationUserId);
+            } catch (IOException e) {
+                mRuntimeDataStore.setUserConnectionStatus(destinationUserId, false);
+                throw new SendMessageException("Could not open socket or send message through new socket", e);
+            }
         }
     }
 
@@ -49,6 +62,7 @@ public class SendMessageUseCase {
         return new JSONObject()
                 .put("type", "TEXT_MESSAGE")
                 .put("mac_address", mNetworkController.getMacAddress())
+                .put("username", mRuntimeDataStore.readUsername())
                 .put("timestamp", new Date().getTime())
                 .put("content", message);
     }

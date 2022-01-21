@@ -1,80 +1,84 @@
 package com.simplesmartapps.chatsystem;
 
-import java.io.BufferedReader;
+import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
+import com.simplesmartapps.chatsystem.data.local.model.User;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.simplesmartapps.chatsystem.Constants.TCP_SERVER_INPUT_PORT;
 
 public class TCPServer {
-    private ServerSocket serverSocket;
+    private final RuntimeDataStore mRuntimeDataStore;
+    private ServerSocket mServerSocket;
 
-    public void start(int port) {
-        Thread receivingStartThread = new Thread(() -> {
+    @Inject
+    public TCPServer(RuntimeDataStore runtimeDataStore) {
+        this.mRuntimeDataStore = runtimeDataStore;
+    }
+
+    public void start() throws IOException {
+        mServerSocket = new ServerSocket(TCP_SERVER_INPUT_PORT);
+
+        Thread serverThread = new Thread(() -> {
             try {
-                serverSocket = new
+                while (true) {
+                    Socket clientSocket = mServerSocket.accept();
 
-                        ServerSocket(port);
+                    JSONObject firstMessage = readFirstMessage(clientSocket);
+                    String userId = firstMessage.getString("mac_address");
+                    String remoteUsername = firstMessage.getString("username");
+                    InetAddress sourceIpAddress = clientSocket.getInetAddress();
+                    String messageContent = firstMessage.getString("content");
+
+                    mRuntimeDataStore.addOpenSocket(userId, clientSocket);
+                    updateUsersSetIfNeeded(userId, remoteUsername, sourceIpAddress);
+                    // Start a TCPConnectionHandler to communicate with the remote user
+                    ChatSystemApplication.injector.getInstance(TCPConnectionHandler.class).start(clientSocket, userId);
+                    //TODO: Add message to DB
+                    System.out.println(remoteUsername + " says: " + messageContent);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            while (true) {
-                try {
-                    new
-
-                            EchoClientHandler(serverSocket.accept()).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
-        receivingStartThread.start();
+        serverThread.start();
     }
 
-    public void stop() throws IOException {
-        serverSocket.close();
+    private JSONObject readFirstMessage(Socket clientSocket) throws IOException {
+        JSONTokener tokener = new JSONTokener(clientSocket.getInputStream());
+        return new JSONObject(tokener);
     }
 
-    public static class EchoClientHandler extends Thread {
-        private Socket clientSocket;
-        private PrintWriter out;
-        private BufferedReader in;
+    private void updateUsersSetIfNeeded(String userId, String username, InetAddress ipAddress) {
+        Set<User> usersSet = mRuntimeDataStore.readUsersSet();
+        Optional<User> optionalUserInSet = usersSet.stream().filter(user -> user.macAddress().equals(userId)).findFirst();
 
-        public EchoClientHandler(Socket socket) {
-            this.clientSocket = socket;
+        if (optionalUserInSet.isPresent()) {
+            User existingUser = optionalUserInSet.get();
+            if (!existingUser.isConnected()) {
+                mRuntimeDataStore.setUserConnectionStatus(userId, true);
+            }
+        } else {
+            User newUser = new User(userId, username, ipAddress, true);
+            mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
         }
+    }
 
-        public void run() {
-            try {
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
-                in = new BufferedReader(
-                        new InputStreamReader(clientSocket.getInputStream()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            String inputLine;
-            try {
-                while ((inputLine = in.readLine()) != null) {
-                    System.out.println(inputLine);
-                    if (".".equals(inputLine)) {
-                        out.println("bye");
-                        break;
-                    }
-                    out.println(inputLine);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                in.close();
-                out.close();
-                clientSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void stop() {
+        try {
+            mServerSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

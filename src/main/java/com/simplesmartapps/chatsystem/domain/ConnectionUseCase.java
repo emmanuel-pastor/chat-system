@@ -1,6 +1,7 @@
 package com.simplesmartapps.chatsystem.domain;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.TCPServer;
 import com.simplesmartapps.chatsystem.UDPServer;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
@@ -8,17 +9,21 @@ import com.simplesmartapps.chatsystem.domain.exception.ConnectionException;
 import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
 public class ConnectionUseCase {
     private final NetworkController mNetworkController;
     private final UDPServer mUdpServer;
+    private final TCPServer mTCPServer;
     private final SelectUsernameUseCase mSelectUsernameUseCase;
 
     @Inject
-    public ConnectionUseCase(NetworkController mNetworkController, UDPServer mUdpServer, SelectUsernameUseCase mSelectUsernameUseCase) {
+    public ConnectionUseCase(NetworkController mNetworkController, UDPServer mUdpServer, TCPServer tcpServer, SelectUsernameUseCase mSelectUsernameUseCase) {
         this.mNetworkController = mNetworkController;
         this.mUdpServer = mUdpServer;
+        this.mTCPServer = tcpServer;
         this.mSelectUsernameUseCase = mSelectUsernameUseCase;
     }
 
@@ -30,7 +35,14 @@ public class ConnectionUseCase {
             } catch (BroadcastException e) {
                 throw new ConnectionException("Could not send connection broadcast", e);
             }
+
             mUdpServer.run();
+
+            try {
+                mTCPServer.start();
+            } catch (IOException e) {
+                throw new ConnectionException("Could not start TCP server", e);
+            }
         }
         return isUsernameValid;
     }

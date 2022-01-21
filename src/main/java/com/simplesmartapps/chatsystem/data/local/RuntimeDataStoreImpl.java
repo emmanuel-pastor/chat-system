@@ -1,14 +1,12 @@
 package com.simplesmartapps.chatsystem.data.local;
 
 import com.simplesmartapps.chatsystem.data.local.model.User;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 
 import java.net.Socket;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RuntimeDataStoreImpl implements RuntimeDataStore {
     private static final RuntimeDataStore INSTANCE = new RuntimeDataStoreImpl();
@@ -41,13 +39,25 @@ public class RuntimeDataStoreImpl implements RuntimeDataStore {
 
     @Override
     public void addAllUsers(Set<User> newSet) {
-        usersSet.addAll(newSet);
+        Platform.runLater(() -> usersSet.addAll(newSet));
     }
 
     @Override
-    public void modifyUser(User modifiedUser) {
-        usersSet.removeIf(user -> user.macAddress().equals(modifiedUser.macAddress()));
-        usersSet.add(modifiedUser);
+    public void setUserConnectionStatus(String macAddress, boolean isConnected) {
+        Platform.runLater(() -> {
+            Optional<User> optionalUser = usersSet.stream().filter(user -> user.macAddress().equals(macAddress)).findFirst();
+            if (optionalUser.isPresent()) {
+                User userToDisconnect = optionalUser.get();
+                usersSet.remove(userToDisconnect);
+                usersSet.add(
+                        new User(
+                                userToDisconnect.macAddress(),
+                                userToDisconnect.username(),
+                                userToDisconnect.ipAddress(),
+                                isConnected)
+                );
+            }
+        });
     }
 
     @Override

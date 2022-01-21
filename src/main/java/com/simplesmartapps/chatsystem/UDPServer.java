@@ -5,7 +5,6 @@ import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.util.JsonUtil;
 import com.simplesmartapps.chatsystem.domain.udp_server_use_case.NewUserConnectionUseCase;
 import com.simplesmartapps.chatsystem.domain.udp_server_use_case.UsernameValidationUseCase;
-import javafx.application.Platform;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class UDPServer implements Runnable {
                                 String macAddress = packetData.getString("mac_address");
                                 User newUser = new User(macAddress, username, packetAddress, true);
 
-                                Platform.runLater(() -> mNewUserConnectionUseCase.execute(newUser));
+                                mNewUserConnectionUseCase.execute(newUser);
                             }
                         } catch (IOException e) {
                             System.out.println("An error occurred with receiving or sending data in the UDP server");

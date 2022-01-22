@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import com.simplesmartapps.chatsystem.data.local.DatabaseController;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStoreImpl;
+import com.simplesmartapps.chatsystem.data.local.dao.MessageDao;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.NetworkControllerImpl;
 
@@ -19,6 +20,7 @@ public class CoreDIModule extends AbstractModule {
         bind(NetworkController.class).toInstance(NetworkControllerImpl.getInstance());
         bind(RuntimeDataStore.class).toInstance(RuntimeDataStoreImpl.getInstance());
         bind(DatabaseController.class).in(Singleton.class);
+        bind(MessageDao.class).in(Singleton.class);
     }
 
     @Provides

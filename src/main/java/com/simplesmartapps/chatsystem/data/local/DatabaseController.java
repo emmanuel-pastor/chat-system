@@ -7,38 +7,32 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseController {
-    private final Connection mConnection;
-    private final Statement mStatement;
+    public final Connection mConnection;
 
     @Inject
     public DatabaseController(Connection connection) throws SQLException {
         this.mConnection = connection;
-        this.mStatement = mConnection.createStatement();
 
         createTables();
     }
 
     private void createTables() throws SQLException {
-        String usersTableSql = "CREATE TABLE if not exists \"users\" (\n" +
-                "  \"id\" varchar PRIMARY KEY,\n" +
-                "  \"last_username\" varchar\n" +
-                ");\n";
+        Statement statement = mConnection.createStatement();
         String messagesTableSql = "CREATE TABLE if not exists \"messages\" (\n" +
-                "  \"id\" SERIAL PRIMARY KEY,\n" +
-                "  \"remote_user_id\" varchar,\n" +
-                "  \"type\" enum,\n" +
-                "  \"timestamp\" timestamp,\n" +
-                "  \"content\" text,\n" +
-                "  FOREIGN KEY (\"remote_user_id\") REFERENCES \"users\" (\"id\")\n" +
+                "  \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "  \"type\" text NOT NULL,\n" +
+                "  \"remote_user_id\" text NOT NULL,\n" +
+                "  \"timestamp\" integer NOT NULL,\n" +
+                "  \"is_incoming\" boolean NOT NULL,\n" +
+                "  \"content\" text boolean NOT NULL,\n" +
                 ");";
 
-        mStatement.execute(usersTableSql);
-        mStatement.execute(messagesTableSql);
+        statement.execute(messagesTableSql);
+        statement.close();
     }
 
     public void closeConnection() {
         try {
-            mStatement.close();
             mConnection.close();
         } catch (SQLException e) {
             e.printStackTrace();

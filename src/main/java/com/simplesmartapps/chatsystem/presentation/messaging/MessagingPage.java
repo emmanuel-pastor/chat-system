@@ -3,14 +3,17 @@ package com.simplesmartapps.chatsystem.presentation.messaging;
 import com.simplesmartapps.chatsystem.ChatSystemApplication;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -27,6 +30,21 @@ public class MessagingPage implements Initializable {
     @FXML
     public ListView<User> usersListView;
 
+    @FXML
+    public VBox messageVBox;
+
+    @FXML
+    public Text usernameMessageTextView;
+
+    @FXML
+    public Text usernameInitialMessageTextView;
+
+    @FXML
+    public TextField messageTextField;
+
+    @FXML
+    public Button sendMessageButton;
+
     public MessagingPage() {
         this.mViewModel = ChatSystemApplication.injector.getInstance(MessagingViewModel.class);
     }
@@ -34,12 +52,23 @@ public class MessagingPage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateListView(mViewModel.mUsersSet);
-        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> {
-            updateListView(change.getSet());
+        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateListView(change.getSet()));
+        mViewModel.mSelectedUser.observe(this, selectedUser -> {
+            if (selectedUser != null) {
+                usernameMessageTextView.setText(selectedUser.username());
+                usernameInitialMessageTextView.setText(selectedUser.username().substring(0, 1).toUpperCase());
+            }
         });
         usersListView.setPlaceholder(emptyListPlaceholder());
         usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         usersListView.setCellFactory(listView -> new UsersListCell());
+        usersListView.getSelectionModel().getSelectedIndices().addListener((ListChangeListener<Integer>) change -> {
+            if (change.next() && change.wasAdded()) {
+                messageVBox.setVisible(true);
+                int index = change.getAddedSubList().get(0);
+                mViewModel.onListItemClicked(index);
+            }
+        });
     }
 
     private void updateListView(ObservableSet<? extends User> usersSet) {

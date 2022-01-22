@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <SplitPane dividerPositions="0.5" minHeight="550.0" minWidth="860.0" xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage">
-    <VBox alignment="CENTER">
-        <ListView fx:id="usersListView" prefHeight="550.0"/>
-    </VBox>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"/>
+   <VBox alignment="CENTER">
+      <ListView fx:id="usersListView" prefHeight="550.0"/>
+   </VBox>
+   <VBox fx:id="messageVBox" visible="false">
+      <children>
+         <GridPane fx:id="messageGridPane" hgap="24.0" maxHeight="-Infinity" prefHeight="0.0" prefWidth="431.0"
+                   vgap="8.0">
+            <columnConstraints>
+               <ColumnConstraints halignment="CENTER" hgrow="NEVER"/>
+               <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints vgrow="SOMETIMES"/>
+               <RowConstraints vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <padding>
+               <Insets bottom="10.0" left="25.0" right="25.0" top="10.0"/>
+            </padding>
+            <cursor>
+               <Cursor fx:constant="HAND"/>
+            </cursor>
+            <children>
+               <Circle fx:id="statusMessageCircle" fill="#38b22b" radius="24.0" stroke="BLACK" strokeType="INSIDE"
+                       GridPane.rowSpan="2147483647"/>
+               <Text fx:id="usernameInitialMessageTextView" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0"
+                     textAlignment="CENTER" GridPane.rowSpan="2147483647">
+                  <font>
+                     <Font size="18.0"/>
+                  </font>
+               </Text>
+               <Text fx:id="usernameMessageTextView" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
+                     GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <font>
+                     <Font size="15.0"/>
+                  </font>
+               </Text>
+            </children>
+         </GridPane>
+         <ListView fx:id="messageListView" VBox.vgrow="ALWAYS"/>
+         <HBox fx:id="messageHBox" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
+            <children>
+               <TextField fx:id="messageTextField" prefHeight="28.0" prefWidth="365.0"
+                          promptText="Entrer votre message...">
+                  <opaqueInsets>
+                     <Insets/>
+                  </opaqueInsets>
+                  <HBox.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                  </HBox.margin>
+               </TextField>
+               <Button fx:id="sendMessageButton" mnemonicParsing="false" textAlignment="CENTER">
+                  <graphic>
+                     <FontIcon fill="#38b22b" iconLiteral="fa-send" iconSize="20" selectionFill="#ffffff00" text=""/>
+                  </graphic>
+                  <HBox.margin>
+                     <Insets bottom="10.0" right="10.0" top="10.0"/>
+                  </HBox.margin>
+               </Button>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
 </SplitPane>

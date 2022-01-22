@@ -1,7 +1,7 @@
 package com.simplesmartapps.chatsystem.data.local.model;
 
 public enum MessageType {
-    TEXT("TEXT_MESSAGE"),
+    TEXT_MESSAGE("TEXT_MESSAGE"),
     FILE("FILE");
 
     private final String value;

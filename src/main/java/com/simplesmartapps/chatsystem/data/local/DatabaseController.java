@@ -24,7 +24,7 @@ public class DatabaseController {
                 "  \"remote_user_id\" text NOT NULL,\n" +
                 "  \"timestamp\" integer NOT NULL,\n" +
                 "  \"is_incoming\" boolean NOT NULL,\n" +
-                "  \"content\" text boolean NOT NULL,\n" +
+                "  \"content\" text NOT NULL\n" +
                 ");";
 
         statement.execute(messagesTableSql);

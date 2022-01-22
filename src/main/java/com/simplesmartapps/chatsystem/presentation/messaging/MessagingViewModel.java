@@ -28,8 +28,7 @@ public class MessagingViewModel {
         });
     }
 
-    public void onListItemClicked(int index) {
-        User selectedUser = (User) mRunTimeDataStore.readUsersSet().toArray()[index];
+    public void onListItemClicked(User selectedUser) {
         mSelectedUser.setValue(selectedUser);
     }
 }

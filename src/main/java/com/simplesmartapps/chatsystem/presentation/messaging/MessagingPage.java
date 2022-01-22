@@ -72,20 +72,23 @@ public class MessagingPage implements Initializable {
                 }
             }
         });
-        usersListView.setPlaceholder(emptyListPlaceholder());
-        usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        usersListView.setCellFactory(listView -> new UsersListCell());
-        usersListView.getSelectionModel().getSelectedIndices().addListener((ListChangeListener<Integer>) change -> {
-            if (change.next() && change.wasAdded()) {
-                messagingSideContainer.setVisible(true);
-                int index = change.getAddedSubList().get(0);
-                mViewModel.onListItemClicked(index);
-            }
-        });
+        setUpUsersListView();
     }
 
     private void updateListView(ObservableSet<? extends User> usersSet) {
         usersListView.setItems(FXCollections.observableList(new ArrayList<>(usersSet)));
+    }
+
+    private void setUpUsersListView() {
+        usersListView.setPlaceholder(emptyListPlaceholder());
+        usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        usersListView.setCellFactory(listView -> new UsersListCell());
+        usersListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<User>) change -> {
+            if (change.next() && change.wasAdded()) {
+                messagingSideContainer.setVisible(true);
+                mViewModel.onListItemClicked(change.getAddedSubList().get(0));
+            }
+        });
     }
 
     private VBox emptyListPlaceholder() {

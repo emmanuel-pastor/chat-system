@@ -17,6 +17,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -31,13 +33,19 @@ public class MessagingPage implements Initializable {
     public ListView<User> usersListView;
 
     @FXML
-    public VBox messageVBox;
+    public VBox messagingSideContainer;
 
     @FXML
-    public Text usernameMessageTextView;
+    public Circle selectedUserStatusCircle;
 
     @FXML
-    public Text usernameInitialMessageTextView;
+    public Text selectedUserInitialTextView;
+
+    @FXML
+    public Text selectedUserUsernameTextView;
+
+    @FXML
+    public ListView<String> messagesListView;
 
     @FXML
     public TextField messageTextField;
@@ -55,8 +63,13 @@ public class MessagingPage implements Initializable {
         mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateListView(change.getSet()));
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
-                usernameMessageTextView.setText(selectedUser.username());
-                usernameInitialMessageTextView.setText(selectedUser.username().substring(0, 1).toUpperCase());
+                selectedUserUsernameTextView.setText(selectedUser.username());
+                selectedUserInitialTextView.setText(selectedUser.username().substring(0, 1).toUpperCase());
+                if (selectedUser.isConnected()) {
+                    selectedUserStatusCircle.setFill(Color.web("#38b22b"));
+                } else {
+                    selectedUserStatusCircle.setFill(Color.DARKGRAY);
+                }
             }
         });
         usersListView.setPlaceholder(emptyListPlaceholder());
@@ -64,7 +77,7 @@ public class MessagingPage implements Initializable {
         usersListView.setCellFactory(listView -> new UsersListCell());
         usersListView.getSelectionModel().getSelectedIndices().addListener((ListChangeListener<Integer>) change -> {
             if (change.next() && change.wasAdded()) {
-                messageVBox.setVisible(true);
+                messagingSideContainer.setVisible(true);
                 int index = change.getAddedSubList().get(0);
                 mViewModel.onListItemClicked(index);
             }

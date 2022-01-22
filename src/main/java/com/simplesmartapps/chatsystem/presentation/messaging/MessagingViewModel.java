@@ -7,6 +7,7 @@ import com.simplesmartapps.chatsystem.domain.ListUsersUseCase;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 
 public class MessagingViewModel {
     private final RuntimeDataStore mRunTimeDataStore;
@@ -19,6 +20,12 @@ public class MessagingViewModel {
     public MessagingViewModel(RuntimeDataStore mRunTimeDataStore, ListUsersUseCase listUsersUseCase) {
         this.mRunTimeDataStore = mRunTimeDataStore;
         mUsersSet = listUsersUseCase.execute();
+        mUsersSet.addListener((SetChangeListener<User>) change -> {
+            User userAdded = change.getElementAdded();
+            if (mSelectedUser.getValue() != null && userAdded != null && mSelectedUser.getValue().macAddress().equals(userAdded.macAddress())) {
+                mSelectedUser.setValue(userAdded);
+            }
+        });
     }
 
     public void onListItemClicked(int index) {

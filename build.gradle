@@ -55,6 +55,7 @@ dependencies {
     implementation "com.google.inject:guice:5.0.1"
     implementation('org.json:json:20210307')
     implementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    implementation "org.xerial:sqlite-jdbc:3.36.0.3"
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

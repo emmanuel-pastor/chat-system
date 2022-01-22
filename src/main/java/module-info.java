@@ -7,6 +7,7 @@ module com.simplesmartapps.chatsystem {
     requires com.google.guice;
     requires org.json;
     requires java.desktop;
+    requires java.sql;
 
     opens com.simplesmartapps.chatsystem to javafx.fxml;
     exports com.simplesmartapps.chatsystem;

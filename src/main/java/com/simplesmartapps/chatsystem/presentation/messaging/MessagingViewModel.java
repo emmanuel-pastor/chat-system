@@ -9,6 +9,7 @@ import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.concurrent.Task;
 
 public class MessagingViewModel {
     private final SendMessageUseCase mSendMessageUseCase;
@@ -43,14 +44,28 @@ public class MessagingViewModel {
 
     private void sendMessage(String message) {
         if (mSelectedUser.getValue() != null) {
-            try {
-                mSate.setValue(ViewState.LOADING);
-                mSendMessageUseCase.execute(message, mSelectedUser.getValue());
-                mSate.setValue(ViewState.READY);
-            } catch (SendMessageException e) {
-                e.printStackTrace();
+            mSate.setValue(ViewState.LOADING);
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    mSendMessageUseCase.execute(message, mSelectedUser.getValue());
+                    return null;
+                }
+            };
+
+            task.setOnSucceeded(event -> mSate.setValue(ViewState.READY));
+
+            task.setOnFailed(event -> {
+                Throwable exception = event.getSource().getException();
+                if (exception.getClass().equals(SendMessageException.class)) {
+                    mErrorText.setValue("Could not send the message, try again later");
+                } else {
+                    mErrorText.setValue("An unexpected error occurred");
+                }
                 mSate.setValue(ViewState.ERROR);
-            }
+            });
+
+            new Thread(task).start();
         }
     }
 }

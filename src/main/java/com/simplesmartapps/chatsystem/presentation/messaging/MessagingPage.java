@@ -55,6 +55,9 @@ public class MessagingPage implements Initializable {
     @FXML
     public ProgressIndicator sendMessageLoadingIndicator;
 
+    @FXML
+    public Text errorTextView;
+
     public MessagingPage() {
         this.mViewModel = ChatSystemApplication.injector.getInstance(MessagingViewModel.class);
     }
@@ -63,14 +66,25 @@ public class MessagingPage implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         mViewModel.mSate.observe(this, newState -> {
             if (newState == ViewState.LOADING) {
+                messageTextField.setDisable(true);
+                errorTextView.setVisible(false);
                 sendMessageButton.setVisible(false);
                 sendMessageLoadingIndicator.setVisible(true);
             } else if (newState == ViewState.READY) {
                 sendMessageLoadingIndicator.setVisible(false);
+                errorTextView.setVisible(false);
                 sendMessageButton.setVisible(true);
+                messageTextField.setDisable(false);
+                messageTextField.setText("");
             } else if (newState == ViewState.ERROR) {
+                sendMessageLoadingIndicator.setVisible(false);
+                messageTextField.setDisable(false);
+                sendMessageButton.setVisible(true);
+                errorTextView.setVisible(true);
             }
         });
+
+        mViewModel.mErrorText.observe(this, newErrorText -> errorTextView.setText(newErrorText));
 
         setUpUsersListView();
         updateListView(mViewModel.mUsersSet);

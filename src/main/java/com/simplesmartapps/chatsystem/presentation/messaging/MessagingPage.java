@@ -104,7 +104,15 @@ public class MessagingPage implements Initializable {
             }
         });
 
-        mViewModel.mMessagesList.observe(this, newList -> messagesListView.setItems(newList));
+        mViewModel.mMessagesList.observe(this, newList -> {
+            messagesListView.setItems(newList);
+            if (newList != null) {
+                messagesListView.scrollTo(newList.size());
+                newList.addListener((ListChangeListener<Message>) change -> {
+                    messagesListView.scrollTo(change.getList().size());
+                });
+            }
+        });
 
         sendMessageButton.setOnMouseClicked(event -> mViewModel.onSendButtonClicked(messageTextField.getText()));
         messageTextField.setOnKeyPressed(event -> {

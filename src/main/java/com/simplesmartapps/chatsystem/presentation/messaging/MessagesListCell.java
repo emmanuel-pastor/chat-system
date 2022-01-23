@@ -71,8 +71,20 @@ public class MessagesListCell extends ListCell<Message> {
     }
 
     private String formatDate(long timestamp) {
-        String pattern = "hh:mm";
+        Date messageDate = Date.from(Instant.ofEpochMilli(timestamp));
+        boolean wasSentToday = isSameDay(messageDate, new Date());
+        String pattern;
+        if (wasSentToday) {
+            pattern = "HH:mm";
+        } else {
+            pattern = "d MMMM, HH:mm";
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(Date.from(Instant.ofEpochMilli(timestamp)));
+        return simpleDateFormat.format(messageDate);
+    }
+
+    private boolean isSameDay(Date date1, Date date2) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(date1).equals(fmt.format(date2));
     }
 }

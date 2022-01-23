@@ -29,12 +29,10 @@ public class TCPConnectionHandler {
                 JSONTokener tokener = new JSONTokener(socket.getInputStream());
                 while (!tokener.end()) {
                     JSONObject json = new JSONObject(tokener);
-                    String remoteUsername = json.getString("username");
                     MessageType type = MessageType.valueOf(json.getString("type"));
                     long timestamp = json.getLong("timestamp");
                     String content = json.getString("content");
 
-                    System.out.println(remoteUsername + " says: " + content);
                     Message message = new Message(0, remoteUserId, type, timestamp, true, content);
                     try {
                         mMessageDao.insertMessage(message);

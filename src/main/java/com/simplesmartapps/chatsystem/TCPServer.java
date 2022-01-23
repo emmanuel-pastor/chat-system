@@ -58,7 +58,6 @@ public class TCPServer {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(remoteUsername + " says: " + messageContent);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

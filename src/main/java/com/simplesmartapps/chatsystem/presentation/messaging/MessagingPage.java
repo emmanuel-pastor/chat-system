@@ -71,12 +71,19 @@ public class MessagingPage implements Initializable {
                 errorTextView.setVisible(false);
                 sendMessageButton.setVisible(false);
                 sendMessageLoadingIndicator.setVisible(true);
+                if (messageTextField.isVisible()) {
+                    // To avoid the focus going back to the users list view thus provoking some weird visual effect
+                    selectedUserUsernameTextView.requestFocus();
+                }
             } else if (newState == ViewState.READY) {
                 sendMessageLoadingIndicator.setVisible(false);
                 errorTextView.setVisible(false);
                 sendMessageButton.setVisible(true);
                 messageTextField.setDisable(false);
                 messageTextField.setText("");
+                if (messageTextField.isVisible()) {
+                    messageTextField.requestFocus();
+                }
             } else if (newState == ViewState.ERROR) {
                 sendMessageLoadingIndicator.setVisible(false);
                 messageTextField.setDisable(false);
@@ -114,7 +121,9 @@ public class MessagingPage implements Initializable {
             }
         });
 
-        sendMessageButton.setOnMouseClicked(event -> mViewModel.onSendButtonClicked(messageTextField.getText()));
+        sendMessageButton.setOnMouseClicked(event -> {
+            mViewModel.onSendButtonClicked(messageTextField.getText());
+        });
         messageTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 mViewModel.onEnterKeyPressed(messageTextField.getText());

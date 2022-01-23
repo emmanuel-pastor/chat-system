@@ -87,9 +87,9 @@ public class MessagingPage implements Initializable {
         mViewModel.mErrorText.observe(this, newErrorText -> errorTextView.setText(newErrorText));
 
         setUpUsersListView();
-        updateListView(mViewModel.mUsersSet);
+        setUpMessagesListView();
 
-        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateListView(change.getSet()));
+        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateUsersListView(change.getSet()));
 
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
@@ -111,10 +111,6 @@ public class MessagingPage implements Initializable {
         });
     }
 
-    private void updateListView(ObservableSet<? extends User> usersSet) {
-        usersListView.setItems(FXCollections.observableList(new ArrayList<>(usersSet)));
-    }
-
     private void setUpUsersListView() {
         usersListView.setPlaceholder(emptyUsersListPlaceholder());
         usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -125,6 +121,11 @@ public class MessagingPage implements Initializable {
                 mViewModel.onListItemClicked(change.getAddedSubList().get(0));
             }
         });
+        updateUsersListView(mViewModel.mUsersSet);
+    }
+
+    private void updateUsersListView(ObservableSet<? extends User> usersSet) {
+        usersListView.setItems(FXCollections.observableList(new ArrayList<>(usersSet)));
     }
 
     private VBox emptyUsersListPlaceholder() {
@@ -140,6 +141,28 @@ public class MessagingPage implements Initializable {
         vbox.setSpacing(40);
         vbox.setPadding(new Insets(0, 20, 0, 20));
         vbox.setAlignment(Pos.CENTER);
+        return vbox;
+    }
+
+    private void setUpMessagesListView() {
+        messagesListView.setPlaceholder(emptyMessagesListPlaceholder());
+        messagesListView.setMouseTransparent(true);
+        messagesListView.setFocusTraversable(false);
+    }
+
+    private VBox emptyMessagesListPlaceholder() {
+        URL imagePath = this.getClass().getResource("images/no_message.png");
+        assert imagePath != null;
+        Image image = new Image(imagePath.toString());
+        ImageView imageView = new ImageView(image);
+
+        Text textView = new Text("No message found");
+
+        VBox vbox = new VBox(imageView, textView);
+        vbox.setSpacing(40);
+        vbox.setPadding(new Insets(0, 20, 0, 20));
+        vbox.setAlignment(Pos.CENTER);
+
         return vbox;
     }
 }

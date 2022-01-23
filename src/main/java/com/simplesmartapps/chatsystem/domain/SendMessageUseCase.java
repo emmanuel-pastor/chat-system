@@ -43,10 +43,13 @@ public class SendMessageUseCase {
         if (isSocketOpened) {
             try {
                 sendMessage(jsonMessage, openedSockets.get(destinationUserId));
+                mMessageDao.insertMessage(message);
             } catch (IOException e) {
                 mRuntimeDataStore.removeOpenSocket(destinationUserId);
                 mRuntimeDataStore.setUserConnectionStatus(destinationUserId, false);
                 throw new SendMessageException("Could not send message through previously opened socket", e);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         } else {
             try {

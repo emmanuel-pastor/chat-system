@@ -94,6 +94,7 @@ public class MessagingViewModel {
                     mErrorText.setValue("Could not send the message, try again later");
                 } else {
                     mErrorText.setValue("An unexpected error occurred");
+                    exception.printStackTrace();
                 }
                 mSate.setValue(ViewState.ERROR);
             });

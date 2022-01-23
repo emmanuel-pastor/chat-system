@@ -54,7 +54,7 @@ public class SendMessageUseCase {
         } else {
             try {
                 Socket socket = new Socket(destinationUser.ipAddress(), TCP_SERVER_INPUT_PORT);
-                sendMessage(jsonMessage, openedSockets.get(destinationUserId));
+                sendMessage(jsonMessage, socket);
 
                 mMessageDao.insertMessage(message);
                 mRuntimeDataStore.addOpenSocket(destinationUserId, socket);

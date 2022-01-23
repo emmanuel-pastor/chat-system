@@ -1,6 +1,7 @@
 package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import com.simplesmartapps.chatsystem.ChatSystemApplication;
+import com.simplesmartapps.chatsystem.data.local.model.Message;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.FXCollections;
@@ -29,34 +30,34 @@ public class MessagingPage implements Initializable {
     private final MessagingViewModel mViewModel;
 
     @FXML
-    public ListView<User> usersListView;
+    private ListView<User> usersListView;
 
     @FXML
-    public VBox messagingSideContainer;
+    private VBox messagingSideContainer;
 
     @FXML
-    public Circle selectedUserStatusCircle;
+    private Circle selectedUserStatusCircle;
 
     @FXML
-    public Text selectedUserInitialTextView;
+    private Text selectedUserInitialTextView;
 
     @FXML
-    public Text selectedUserUsernameTextView;
+    private Text selectedUserUsernameTextView;
 
     @FXML
-    public ListView<String> messagesListView;
+    private ListView<Message> messagesListView;
 
     @FXML
-    public TextField messageTextField;
+    private TextField messageTextField;
 
     @FXML
-    public Button sendMessageButton;
+    private Button sendMessageButton;
 
     @FXML
-    public ProgressIndicator sendMessageLoadingIndicator;
+    private ProgressIndicator sendMessageLoadingIndicator;
 
     @FXML
-    public Text errorTextView;
+    private Text errorTextView;
 
     public MessagingPage() {
         this.mViewModel = ChatSystemApplication.injector.getInstance(MessagingViewModel.class);
@@ -148,6 +149,7 @@ public class MessagingPage implements Initializable {
         messagesListView.setPlaceholder(emptyMessagesListPlaceholder());
         messagesListView.setMouseTransparent(true);
         messagesListView.setFocusTraversable(false);
+        messagesListView.setCellFactory(listView -> new MessagesListCell());
     }
 
     private VBox emptyMessagesListPlaceholder() {

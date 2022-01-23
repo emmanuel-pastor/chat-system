@@ -104,6 +104,8 @@ public class MessagingPage implements Initializable {
             }
         });
 
+        mViewModel.mMessagesList.observe(this, newList -> messagesListView.setItems(newList));
+
         sendMessageButton.setOnMouseClicked(event -> mViewModel.onSendButtonClicked(messageTextField.getText()));
         messageTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -147,7 +149,6 @@ public class MessagingPage implements Initializable {
 
     private void setUpMessagesListView() {
         messagesListView.setPlaceholder(emptyMessagesListPlaceholder());
-        messagesListView.setMouseTransparent(true);
         messagesListView.setFocusTraversable(false);
         messagesListView.setCellFactory(listView -> new MessagesListCell());
     }

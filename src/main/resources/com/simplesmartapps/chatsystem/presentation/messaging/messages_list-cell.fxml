@@ -5,9 +5,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <HBox fx:id="mainContainer" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-      minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-    <GridPane fx:id="cellContainer" alignment="CENTER_LEFT">
+      minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <GridPane fx:id="cellContainer" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity"/>
         </columnConstraints>
@@ -17,8 +16,7 @@
         </rowConstraints>
         <HBox fx:id="messageContentContainer" style="-fx-background-radius: 100; -fx-background-color: #3984ff;">
             <Text fx:id="messageContentTextView" fill="WHITE" strokeLineCap="ROUND" strokeType="INSIDE"
-                  strokeWidth="0.0"
-                  text="Le texte de mon message">
+                  strokeWidth="0.0" text="Le texte de mon message">
                 <font>
                     <Font size="14.0"/>
                 </font>

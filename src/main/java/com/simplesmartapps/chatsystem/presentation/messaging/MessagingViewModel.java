@@ -1,26 +1,34 @@
 package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.data.local.model.Message;
 import com.simplesmartapps.chatsystem.data.local.model.User;
+import com.simplesmartapps.chatsystem.domain.ListMessagesUseCase;
 import com.simplesmartapps.chatsystem.domain.ListUsersUseCase;
 import com.simplesmartapps.chatsystem.domain.SendMessageUseCase;
 import com.simplesmartapps.chatsystem.domain.exception.SendMessageException;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.concurrent.Task;
 
+import static com.simplesmartapps.chatsystem.presentation.util.ViewState.ERROR;
+
 public class MessagingViewModel {
     private final SendMessageUseCase mSendMessageUseCase;
+    private final ListMessagesUseCase mListMessagesUseCase;
     public ObservableSet<User> mUsersSet;
     public ObservableProperty<User> mSelectedUser = new ObservableProperty<>(null);
+    public ObservableProperty<ObservableList<Message>> mMessagesList = new ObservableProperty<>(null);
     public ObservableProperty<ViewState> mSate = new ObservableProperty<>(ViewState.READY);
     public ObservableProperty<String> mErrorText = new ObservableProperty<>("");
 
     @Inject
-    public MessagingViewModel(SendMessageUseCase mSendMessageUseCase, ListUsersUseCase listUsersUseCase) {
+    public MessagingViewModel(SendMessageUseCase mSendMessageUseCase, ListMessagesUseCase listMessagesUseCase, ListUsersUseCase listUsersUseCase) {
         this.mSendMessageUseCase = mSendMessageUseCase;
+        this.mListMessagesUseCase = listMessagesUseCase;
         mUsersSet = listUsersUseCase.execute();
         mUsersSet.addListener((SetChangeListener<User>) change -> {
             User userAdded = change.getElementAdded();
@@ -32,6 +40,31 @@ public class MessagingViewModel {
 
     public void onListItemClicked(User selectedUser) {
         mSelectedUser.setValue(selectedUser);
+        updateMessagesList(selectedUser.macAddress());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateMessagesList(String selectedUserId) {
+        Task<ObservableList<Message>> task = new Task<>() {
+            @Override
+            protected ObservableList<Message> call() throws Exception {
+                return mListMessagesUseCase.execute(selectedUserId);
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            mMessagesList.setValue((ObservableList<Message>) event.getSource().getValue());
+            mSate.setValue(ViewState.READY);
+        });
+
+        task.setOnFailed(event -> {
+            Throwable exception = event.getSource().getException();
+            exception.printStackTrace();
+            mErrorText.setValue("Could not load the list of messages");
+            mSate.setValue(ERROR);
+        });
+
+        new Thread(task).start();
     }
 
     public void onSendButtonClicked(String message) {

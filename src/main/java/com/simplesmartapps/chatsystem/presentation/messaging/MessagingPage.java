@@ -2,6 +2,7 @@ package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import com.simplesmartapps.chatsystem.ChatSystemApplication;
 import com.simplesmartapps.chatsystem.data.local.model.User;
+import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
@@ -10,12 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -53,14 +52,31 @@ public class MessagingPage implements Initializable {
     @FXML
     public Button sendMessageButton;
 
+    @FXML
+    public ProgressIndicator sendMessageLoadingIndicator;
+
     public MessagingPage() {
         this.mViewModel = ChatSystemApplication.injector.getInstance(MessagingViewModel.class);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mViewModel.mSate.observe(this, newState -> {
+            if (newState == ViewState.LOADING) {
+                sendMessageButton.setVisible(false);
+                sendMessageLoadingIndicator.setVisible(true);
+            } else if (newState == ViewState.READY) {
+                sendMessageLoadingIndicator.setVisible(false);
+                sendMessageButton.setVisible(true);
+            } else if (newState == ViewState.ERROR) {
+            }
+        });
+
+        setUpUsersListView();
         updateListView(mViewModel.mUsersSet);
+
         mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateListView(change.getSet()));
+
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
                 selectedUserUsernameTextView.setText(selectedUser.username());
@@ -72,7 +88,13 @@ public class MessagingPage implements Initializable {
                 }
             }
         });
-        setUpUsersListView();
+
+        sendMessageButton.setOnMouseClicked(event -> mViewModel.onSendButtonClicked(messageTextField.getText()));
+        messageTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                mViewModel.onEnterKeyPressed(messageTextField.getText());
+            }
+        });
     }
 
     private void updateListView(ObservableSet<? extends User> usersSet) {
@@ -80,7 +102,7 @@ public class MessagingPage implements Initializable {
     }
 
     private void setUpUsersListView() {
-        usersListView.setPlaceholder(emptyListPlaceholder());
+        usersListView.setPlaceholder(emptyUsersListPlaceholder());
         usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         usersListView.setCellFactory(listView -> new UsersListCell());
         usersListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<User>) change -> {
@@ -91,7 +113,7 @@ public class MessagingPage implements Initializable {
         });
     }
 
-    private VBox emptyListPlaceholder() {
+    private VBox emptyUsersListPlaceholder() {
         URL imagePath = this.getClass().getResource("images/alone.png");
         assert imagePath != null;
         Image image = new Image(imagePath.toString());

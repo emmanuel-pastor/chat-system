@@ -1,6 +1,5 @@
 package com.simplesmartapps.chatsystem.presentation.messaging;
 
-import com.simplesmartapps.chatsystem.data.local.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
@@ -11,7 +10,7 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class UsersListCell extends ListCell<User> {
+public class UsersListCell extends ListCell<UserWithLatestMessage> {
     @FXML
     private GridPane gridPane;
 
@@ -42,20 +41,29 @@ public class UsersListCell extends ListCell<User> {
     }
 
     @Override
-    protected void updateItem(User user, boolean empty) {
-        super.updateItem(user, empty);
+    protected void updateItem(UserWithLatestMessage userWithLatestMessage, boolean empty) {
+        super.updateItem(userWithLatestMessage, empty);
 
-        if (empty || user == null) {
+        if (empty || userWithLatestMessage == null) {
             setText(null);
             setGraphic(null);
         } else {
-            if (user.isConnected()) {
+            if (userWithLatestMessage.user().isConnected()) {
                 statusCircle.setFill(Color.web("#38b22b"));
             } else {
                 statusCircle.setFill(Color.DARKGRAY);
             }
-            usernameInitialTextView.setText(user.username().substring(0, 1).toUpperCase());
-            usernameTextView.setText(user.username());
+            usernameInitialTextView.setText(userWithLatestMessage.user().username().substring(0, 1).toUpperCase());
+            usernameTextView.setText(userWithLatestMessage.user().username());
+            if (userWithLatestMessage.latestMessage() != null) {
+                if (userWithLatestMessage.latestMessage().isIncoming()) {
+                    lastMessageTextView.setText(userWithLatestMessage.user().username() + ": " + userWithLatestMessage.latestMessage().content());
+                } else {
+                    lastMessageTextView.setText("You: " + userWithLatestMessage.latestMessage().content());
+                }
+            } else {
+                lastMessageTextView.setText("");
+            }
 
             setText(null);
             setGraphic(gridPane);

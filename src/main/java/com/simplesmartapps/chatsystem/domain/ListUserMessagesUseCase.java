@@ -7,11 +7,11 @@ import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 
-public class ListMessagesUseCase {
+public class ListUserMessagesUseCase {
     final private MessageDao mMessagingDao;
 
     @Inject
-    public ListMessagesUseCase(MessageDao mMessagingDao) {
+    public ListUserMessagesUseCase(MessageDao mMessagingDao) {
         this.mMessagingDao = mMessagingDao;
     }
 

@@ -4,10 +4,7 @@ import com.simplesmartapps.chatsystem.ChatSystemApplication;
 import com.simplesmartapps.chatsystem.data.local.model.Message;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -24,13 +21,15 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MessagingPage implements Initializable {
     private final MessagingViewModel mViewModel;
 
     @FXML
-    private ListView<User> usersListView;
+    private ListView<UserWithLatestMessage> usersListView;
 
     @FXML
     private VBox messagingSideContainer;
@@ -97,7 +96,8 @@ public class MessagingPage implements Initializable {
         setUpUsersListView();
         setUpMessagesListView();
 
-        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateUsersListView(change.getSet()));
+        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateUsersListView(change.getSet(), mViewModel.mLatestMessages));
+        mViewModel.mLatestMessages.addListener((ListChangeListener<? super Message>) change -> updateUsersListView(mViewModel.mUsersSet, change.getList()));
 
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
@@ -111,7 +111,7 @@ public class MessagingPage implements Initializable {
             }
         });
 
-        mViewModel.mMessagesList.observe(this, newList -> {
+        mViewModel.mMessages.observe(this, newList -> {
             messagesListView.setItems(newList);
             if (newList != null) {
                 messagesListView.scrollTo(newList.size());
@@ -135,17 +135,24 @@ public class MessagingPage implements Initializable {
         usersListView.setPlaceholder(emptyUsersListPlaceholder());
         usersListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         usersListView.setCellFactory(listView -> new UsersListCell());
-        usersListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<User>) change -> {
+        usersListView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<UserWithLatestMessage>) change -> {
             if (change.next() && change.wasAdded()) {
                 messagingSideContainer.setVisible(true);
-                mViewModel.onListItemClicked(change.getAddedSubList().get(0));
+                mViewModel.onListItemClicked(change.getAddedSubList().get(0).user());
             }
         });
-        updateUsersListView(mViewModel.mUsersSet);
+        updateUsersListView(mViewModel.mUsersSet, mViewModel.mLatestMessages);
     }
 
-    private void updateUsersListView(ObservableSet<? extends User> usersSet) {
-        usersListView.setItems(FXCollections.observableList(new ArrayList<>(usersSet)));
+    private void updateUsersListView(ObservableSet<? extends User> usersSet, ObservableList<? extends Message> latestMessages) {
+        List<UserWithLatestMessage> userWithLatestMessages = usersSet.stream()
+                .map(user -> new UserWithLatestMessage(
+                        user,
+                        latestMessages.stream()
+                                .filter(message -> message.remoteUserId().equals(user.macAddress())).findFirst().orElse(null),
+                        true)
+                ).collect(Collectors.toList());
+        usersListView.setItems(FXCollections.observableList(new ArrayList<>(userWithLatestMessages)));
     }
 
     private VBox emptyUsersListPlaceholder() {

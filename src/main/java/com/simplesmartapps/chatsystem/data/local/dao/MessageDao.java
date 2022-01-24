@@ -11,12 +11,14 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDao {
     private final DatabaseController mDbController;
     private final ObservableList<Message> mMessagesList = FXCollections.observableArrayList();
+    private final ObservableList<Message> mLatestMessagesList = FXCollections.observableArrayList();
     private String currentlyObservedUserId;
 
     @Inject
@@ -40,6 +42,7 @@ public class MessageDao {
         if (message.remoteUserId().equals(currentlyObservedUserId)) {
             getMessagesByUserIdExecution(currentlyObservedUserId);
         }
+        getLatestMessagesExecution();
     }
 
     public ObservableList<Message> getMessagesByUserId(String remoteUserId) throws SQLException {
@@ -58,10 +61,39 @@ public class MessageDao {
         statement.setString(1, remoteUserId);
 
         ResultSet resultSet = statement.executeQuery();
+        List<Message> messages = queryResultToMessagesList(resultSet);
+
+        statement.close();
+
+        Platform.runLater(() -> mMessagesList.setAll(messages));
+    }
+
+    public ObservableList<Message> getLatestMessages() throws SQLException {
+        getLatestMessagesExecution();
+        return mLatestMessagesList;
+    }
+
+    private void getLatestMessagesExecution() throws SQLException {
+        String selectRequest = "select messages.* from messages\n" +
+                "                           join\n" +
+                "                       (select max(timestamp) maxtime, remote_user_id from messages group by remote_user_id) latest\n" +
+                "                       on messages.timestamp=latest.maxtime and messages.remote_user_id=latest.remote_user_id;";
+        Statement statement = mDbController.mConnection.createStatement();
+
+        ResultSet resultSet = statement.executeQuery(selectRequest);
+        List<Message> messages = queryResultToMessagesList(resultSet);
+
+        statement.close();
+
+        Platform.runLater(() -> mLatestMessagesList.setAll(messages));
+    }
+
+    private List<Message> queryResultToMessagesList(ResultSet resultSet) throws SQLException {
         List<Message> messages = new ArrayList<>();
         while (resultSet.next()) {
             long id = resultSet.getLong("id");
             MessageType type = MessageType.valueOf(resultSet.getString("type"));
+            String remoteUserId = resultSet.getString("remote_user_id");
             long timestamp = resultSet.getLong("timestamp");
             boolean isIncoming = resultSet.getBoolean("is_incoming");
             String content = resultSet.getString("content");
@@ -69,9 +101,6 @@ public class MessageDao {
 
             messages.add(message);
         }
-
-        statement.close();
-
-        Platform.runLater(() -> mMessagesList.setAll(messages));
+        return messages;
     }
 }

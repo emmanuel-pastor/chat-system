@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.*?>
-<GridPane fx:id="gridPane" hgap="24.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-          vgap="8.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<GridPane fx:id="gridPane" hgap="24.0" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0"
+          xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" hgrow="NEVER"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
+        <ColumnConstraints maxWidth="300.0" minWidth="10.0"/>
     </columnConstraints>
     <rowConstraints>
         <RowConstraints vgrow="SOMETIMES"/>
@@ -32,8 +34,9 @@
             <Font size="15.0"/>
         </font>
     </Text>
-    <Text fx:id="lastMessageTextView" strokeType="OUTSIDE" strokeWidth="0.0" text="Voici le dernier message envoyé"
-          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label fx:id="lastMessageLabel"
+           text="Voici le dernier message envoyé, il ce peut que ce message soit un pe long et qu'il faille le couper"
+           GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1"/>
     <cursor>
         <Cursor fx:constant="HAND"/>
     </cursor>

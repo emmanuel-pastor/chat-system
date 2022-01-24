@@ -4,6 +4,7 @@ import com.simplesmartapps.chatsystem.data.local.model.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -26,7 +27,7 @@ public class MessagesListCell extends ListCell<Message> {
     private HBox messageContentContainer;
 
     @FXML
-    private Text messageContentTextView;
+    private Label messageContentLabel;
 
     @FXML
     private Text dateTextView;
@@ -55,14 +56,14 @@ public class MessagesListCell extends ListCell<Message> {
         } else {
             if (message.isIncoming()) {
                 cellContainer.setAlignment(Pos.CENTER_LEFT);
-                messageContentTextView.setFill(Color.BLACK);
+                messageContentLabel.setTextFill(Color.BLACK);
                 messageContentContainer.setStyle("-fx-background-radius: 100; -fx-background-color: #e4e6eb;");
             } else {
                 cellContainer.setAlignment(Pos.CENTER_RIGHT);
-                messageContentTextView.setFill(Color.WHITE);
+                messageContentLabel.setTextFill(Color.WHITE);
                 messageContentContainer.setStyle("-fx-background-radius: 100; -fx-background-color: #3984ff;");
             }
-            messageContentTextView.setText(message.content());
+            messageContentLabel.setText(message.content());
             dateTextView.setText(formatDate(message.timestamp()));
 
             setText(null);

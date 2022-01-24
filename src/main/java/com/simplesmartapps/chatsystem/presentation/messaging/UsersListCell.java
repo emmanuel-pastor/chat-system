@@ -2,6 +2,7 @@ package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -24,7 +25,7 @@ public class UsersListCell extends ListCell<UserWithLatestMessage> {
     private Text usernameTextView;
 
     @FXML
-    private Text lastMessageTextView;
+    private Label lastMessageLabel;
 
     public UsersListCell() {
         loadFXML();
@@ -57,12 +58,12 @@ public class UsersListCell extends ListCell<UserWithLatestMessage> {
             usernameTextView.setText(userWithLatestMessage.user().username());
             if (userWithLatestMessage.latestMessage() != null) {
                 if (userWithLatestMessage.latestMessage().isIncoming()) {
-                    lastMessageTextView.setText(userWithLatestMessage.user().username() + ": " + userWithLatestMessage.latestMessage().content());
+                    lastMessageLabel.setText(userWithLatestMessage.user().username() + ": " + userWithLatestMessage.latestMessage().content());
                 } else {
-                    lastMessageTextView.setText("You: " + userWithLatestMessage.latestMessage().content());
+                    lastMessageLabel.setText("You: " + userWithLatestMessage.latestMessage().content());
                 }
             } else {
-                lastMessageTextView.setText("");
+                lastMessageLabel.setText("");
             }
 
             setText(null);

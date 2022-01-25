@@ -126,8 +126,12 @@ public class MessagingPage implements Initializable {
                 selectedUserInitialTextView.setText(selectedUser.username().substring(0, 1).toUpperCase());
                 if (selectedUser.isConnected()) {
                     selectedUserStatusCircle.setFill(Color.web("#38b22b"));
+                    messageTextField.setDisable(false);
+                    sendMessageButton.setDisable(false);
                 } else {
                     selectedUserStatusCircle.setFill(Color.DARKGRAY);
+                    messageTextField.setDisable(true);
+                    sendMessageButton.setDisable(true);
                 }
             }
         });

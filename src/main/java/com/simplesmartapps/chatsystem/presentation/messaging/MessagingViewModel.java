@@ -145,7 +145,7 @@ public class MessagingViewModel {
             mUsernameEditionState.setValue(ERROR);
             return;
         } else if (username.length() > USERNAME_MAX_LENGTH) {
-            mUsernameEditionErrorText.setValue("Username should not be longer than " + USERNAME_MAX_LENGTH + " characters");
+            mUsernameEditionErrorText.setValue("Username should be shorter than " + USERNAME_MAX_LENGTH + " characters");
             mUsernameEditionState.setValue(ERROR);
             return;
         }

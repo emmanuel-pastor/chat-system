@@ -75,6 +75,9 @@ public class MessagingPage implements Initializable {
     private TextField usernameTextField;
 
     @FXML
+    private Label editUsernameErrorLabel;
+
+    @FXML
     private Button disconnectionButton;
 
     public MessagingPage() {
@@ -159,12 +162,14 @@ public class MessagingPage implements Initializable {
                 usernameTextField.setDisable(true);
                 validateUsernameButton.setVisible(false);
                 editUsernameErrorIcon.setVisible(false);
+                editUsernameErrorLabel.setVisible(false);
                 editUsernameButton.setVisible(false);
                 usernameValidationLoadingIndicator.setVisible(true);
             } else if (newState == ViewState.READY) {
                 usernameTextField.setVisible(false);
                 usernameTextField.setDisable(false);
                 editUsernameErrorIcon.setVisible(false);
+                editUsernameErrorLabel.setVisible(false);
                 usernameValidationLoadingIndicator.setVisible(false);
                 validateUsernameButton.setVisible(false);
                 usernameLabel.setVisible(true);
@@ -175,9 +180,11 @@ public class MessagingPage implements Initializable {
                 usernameTextField.setDisable(false);
                 usernameTextField.requestFocus();
                 editUsernameErrorIcon.setVisible(true);
+                editUsernameErrorLabel.setVisible(true);
                 validateUsernameButton.setVisible(true);
             }
         });
+        mViewModel.mUsernameEditionErrorText.observe(this, newText -> editUsernameErrorLabel.setText(newText));
         editUsernameButton.setOnMouseClicked(event -> {
             usernameLabel.setVisible(false);
             editUsernameButton.setVisible(false);

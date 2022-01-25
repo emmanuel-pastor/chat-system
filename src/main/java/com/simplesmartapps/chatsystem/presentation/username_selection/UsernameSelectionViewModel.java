@@ -42,7 +42,7 @@ public class UsernameSelectionViewModel {
             mState.setValue(ERROR);
             return;
         } else if (username.length() > USERNAME_MAX_LENGTH) {
-            mErrorText.setValue("Username should not be longer than " + USERNAME_MAX_LENGTH + " characters");
+            mErrorText.setValue("Username should be shorter than " + USERNAME_MAX_LENGTH + " characters");
             mState.setValue(ERROR);
             return;
         }

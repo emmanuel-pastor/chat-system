@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,13 +59,34 @@ public class MessagingPage implements Initializable {
     @FXML
     private Text errorTextView;
 
+    @FXML
+    private Button editUsernameButton;
+
+    @FXML
+    private Button validateUsernameButton;
+
+    @FXML
+    private ProgressIndicator usernameValidationLoadingIndicator;
+
+    @FXML
+    private FontIcon editUsernameErrorIcon;
+
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private TextField usernameTextField;
+
+    @FXML
+    private Button disconnectionButton;
+
     public MessagingPage() {
         this.mViewModel = ChatSystemApplication.injector.getInstance(MessagingViewModel.class);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mViewModel.mSate.observe(this, newState -> {
+        mViewModel.mMessagingSate.observe(this, newState -> {
             if (newState == ViewState.LOADING) {
                 messageTextField.setDisable(true);
                 errorTextView.setVisible(false);
@@ -91,7 +113,7 @@ public class MessagingPage implements Initializable {
             }
         });
 
-        mViewModel.mErrorText.observe(this, newErrorText -> errorTextView.setText(newErrorText));
+        mViewModel.mMessagingErrorText.observe(this, newErrorText -> errorTextView.setText(newErrorText));
 
         setUpUsersListView();
         setUpMessagesListView();
@@ -115,18 +137,56 @@ public class MessagingPage implements Initializable {
             messagesListView.setItems(newList);
             if (newList != null) {
                 messagesListView.scrollTo(newList.size());
-                newList.addListener((ListChangeListener<Message>) change -> {
-                    messagesListView.scrollTo(change.getList().size());
-                });
+                newList.addListener((ListChangeListener<Message>) change -> messagesListView.scrollTo(change.getList().size()));
             }
         });
 
-        sendMessageButton.setOnMouseClicked(event -> {
-            mViewModel.onSendButtonClicked(messageTextField.getText());
-        });
+        mViewModel.mUsername.observe(this, newUsername -> usernameLabel.setText(newUsername));
+
+        sendMessageButton.setOnMouseClicked(event -> mViewModel.onSendButtonClicked(messageTextField.getText()));
         messageTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                mViewModel.onEnterKeyPressed(messageTextField.getText());
+                mViewModel.onMessageTextFieldEnterKeyPressed(messageTextField.getText());
+            }
+        });
+
+
+        mViewModel.mUsernameEditionState.observe(this, newState -> {
+            if (newState == ViewState.LOADING) {
+                usernameTextField.setDisable(true);
+                validateUsernameButton.setVisible(false);
+                editUsernameErrorIcon.setVisible(false);
+                editUsernameButton.setVisible(false);
+                usernameValidationLoadingIndicator.setVisible(true);
+            } else if (newState == ViewState.READY) {
+                usernameTextField.setVisible(false);
+                usernameTextField.setDisable(false);
+                editUsernameErrorIcon.setVisible(false);
+                usernameValidationLoadingIndicator.setVisible(false);
+                validateUsernameButton.setVisible(false);
+                usernameLabel.setVisible(true);
+                editUsernameButton.setVisible(true);
+            } else if (newState == ViewState.ERROR) {
+                usernameValidationLoadingIndicator.setVisible(false);
+                editUsernameButton.setVisible(false);
+                usernameTextField.setDisable(false);
+                usernameTextField.requestFocus();
+                editUsernameErrorIcon.setVisible(true);
+                validateUsernameButton.setVisible(true);
+            }
+        });
+        editUsernameButton.setOnMouseClicked(event -> {
+            usernameLabel.setVisible(false);
+            editUsernameButton.setVisible(false);
+            usernameTextField.setVisible(true);
+            usernameTextField.setText(mViewModel.mUsername.getValue());
+            usernameTextField.requestFocus();
+            validateUsernameButton.setVisible(true);
+        });
+        validateUsernameButton.setOnMouseClicked(event -> mViewModel.onValidateUsernameButtonClicked(usernameTextField.getText()));
+        usernameTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                mViewModel.onUsernameTextFieldEnterKeyPressed(usernameTextField.getText());
             }
         });
     }

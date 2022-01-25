@@ -29,7 +29,7 @@ public class SelectUsernameUseCase {
     public boolean execute(String usernameCandidate) throws SelectUsernameException {
         try {
             List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), UDP_SERVER_INPUT_PORT, USERNAME_CHECK_TIMEOUT);
-            HashSet<User> newUsersSet = (HashSet<User>) responseList.stream().map(this::userFromBroadcastResponse).collect(Collectors.toSet());
+            HashSet<User> newUsersSet = (HashSet<User>) responseList.stream().map(this::userFromBroadcastResponse).filter(user -> !user.macAddress().equals(mNetworkController.getMacAddress())).collect(Collectors.toSet());
             boolean isUsernameValid = newUsersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
 
             if (isUsernameValid) {

@@ -1,12 +1,12 @@
 package com.simplesmartapps.chatsystem.presentation.messaging;
 
 import com.google.inject.Inject;
+import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.Message;
 import com.simplesmartapps.chatsystem.data.local.model.User;
-import com.simplesmartapps.chatsystem.domain.ListLatestMessagesUseCase;
-import com.simplesmartapps.chatsystem.domain.ListUserMessagesUseCase;
-import com.simplesmartapps.chatsystem.domain.ListUsersUseCase;
-import com.simplesmartapps.chatsystem.domain.SendMessageUseCase;
+import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
+import com.simplesmartapps.chatsystem.domain.*;
+import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import com.simplesmartapps.chatsystem.domain.exception.SendMessageException;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
@@ -18,24 +18,30 @@ import javafx.concurrent.Task;
 
 import java.sql.SQLException;
 
-import static com.simplesmartapps.chatsystem.presentation.util.ViewState.ERROR;
+import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
 
 public class MessagingViewModel {
     private final SendMessageUseCase mSendMessageUseCase;
     private final ListUserMessagesUseCase mListUserMessagesUseCase;
     private final ListLatestMessagesUseCase mListLatestMessagesUseCase;
+    private final ChangeUsernameUseCase mChangeUsernameUseCase;
     public ObservableSet<User> mUsersSet;
     public ObservableList<Message> mLatestMessages = FXCollections.observableArrayList();
     public ObservableProperty<User> mSelectedUser = new ObservableProperty<>(null);
     public ObservableProperty<ObservableList<Message>> mMessages = new ObservableProperty<>(null);
-    public ObservableProperty<ViewState> mSate = new ObservableProperty<>(ViewState.READY);
-    public ObservableProperty<String> mErrorText = new ObservableProperty<>("");
+    public ObservableProperty<String> mUsername = new ObservableProperty<>("");
+    public ObservableProperty<Boolean> mIsUsernameValid = new ObservableProperty<>(true);
+    public ObservableProperty<ViewState> mMessagingSate = new ObservableProperty<>(ViewState.READY);
+    public ObservableProperty<ViewState> mUsernameEditionState = new ObservableProperty<>(ViewState.READY);
+    public ObservableProperty<String> mMessagingErrorText = new ObservableProperty<>("");
+    public ObservableProperty<String> mUsernameEditionErrorText = new ObservableProperty<>("");
 
     @Inject
-    public MessagingViewModel(SendMessageUseCase mSendMessageUseCase, ListUserMessagesUseCase listUserMessagesUseCase, ListLatestMessagesUseCase listLatestMessagesUseCase, ListUsersUseCase listUsersUseCase) {
+    public MessagingViewModel(RuntimeDataStore runtimeDataStore, SendMessageUseCase mSendMessageUseCase, ListUserMessagesUseCase listUserMessagesUseCase, ListLatestMessagesUseCase listLatestMessagesUseCase, ChangeUsernameUseCase changeUsernameUseCase, ListUsersUseCase listUsersUseCase) {
         this.mSendMessageUseCase = mSendMessageUseCase;
         this.mListUserMessagesUseCase = listUserMessagesUseCase;
         this.mListLatestMessagesUseCase = listLatestMessagesUseCase;
+        this.mChangeUsernameUseCase = changeUsernameUseCase;
         mUsersSet = listUsersUseCase.execute();
         loadLatestMessages();
         mUsersSet.addListener((SetChangeListener<User>) change -> {
@@ -44,6 +50,7 @@ public class MessagingViewModel {
                 mSelectedUser.setValue(userAdded);
             }
         });
+        mUsername.setValue(runtimeDataStore.readUsername());
     }
 
     private void loadLatestMessages() {
@@ -51,8 +58,8 @@ public class MessagingViewModel {
             mLatestMessages = mListLatestMessagesUseCase.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            mErrorText.setValue("Could not load the latest messages");
-            mSate.setValue(ERROR);
+            mMessagingErrorText.setValue("Could not load the latest messages");
+            mMessagingSate.setValue(ERROR);
         }
     }
 
@@ -72,14 +79,14 @@ public class MessagingViewModel {
 
         task.setOnSucceeded(event -> {
             mMessages.setValue((ObservableList<Message>) event.getSource().getValue());
-            mSate.setValue(ViewState.READY);
+            mMessagingSate.setValue(ViewState.READY);
         });
 
         task.setOnFailed(event -> {
             Throwable exception = event.getSource().getException();
             exception.printStackTrace();
-            mErrorText.setValue("Could not load the list of messages");
-            mSate.setValue(ERROR);
+            mMessagingErrorText.setValue("Could not load the list of messages");
+            mMessagingSate.setValue(ERROR);
         });
 
         new Thread(task).start();
@@ -89,14 +96,14 @@ public class MessagingViewModel {
         sendMessage(message);
     }
 
-    public void onEnterKeyPressed(String message) {
+    public void onMessageTextFieldEnterKeyPressed(String message) {
         sendMessage(message);
     }
 
     private void sendMessage(String message) {
         if (message.trim().isBlank()) return;
         if (mSelectedUser.getValue() != null) {
-            mSate.setValue(ViewState.LOADING);
+            mMessagingSate.setValue(ViewState.LOADING);
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
@@ -105,21 +112,71 @@ public class MessagingViewModel {
                 }
             };
 
-            task.setOnSucceeded(event -> mSate.setValue(ViewState.READY));
+            task.setOnSucceeded(event -> mMessagingSate.setValue(ViewState.READY));
 
             task.setOnFailed(event -> {
                 Throwable exception = event.getSource().getException();
                 if (exception.getClass().equals(SendMessageException.class)) {
-                    mErrorText.setValue("Could not send the message, try again later");
+                    mMessagingErrorText.setValue("Could not send the message, try again later");
                 } else {
-                    mErrorText.setValue("An unexpected error occurred");
+                    mMessagingErrorText.setValue("An unexpected error occurred");
                     exception.printStackTrace();
                 }
-                mSate.setValue(ViewState.ERROR);
+                mMessagingSate.setValue(ViewState.ERROR);
             });
 
             new Thread(task).start();
         }
+    }
+
+
+    public void onValidateUsernameButtonClicked(String usernameCandidate) {
+        checkUsernameValidity(usernameCandidate);
+    }
+
+    public void onUsernameTextFieldEnterKeyPressed(String usernameCandidate) {
+        checkUsernameValidity(usernameCandidate);
+    }
+
+    private void checkUsernameValidity(String username) {
+        mUsernameEditionState.setValue(LOADING);
+        if (username.isBlank()) {
+            mUsernameEditionErrorText.setValue("Username should not be empty");
+            mUsernameEditionState.setValue(ERROR);
+            return;
+        }
+        Task<Boolean> task = new Task<>() {
+            @Override
+            protected Boolean call() throws Exception {
+                return mChangeUsernameUseCase.execute(username.trim());
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            boolean isValid = (boolean) event.getSource().getValue();
+            if (isValid) {
+                mIsUsernameValid.setValue(true);
+                mUsername.setValue(username);
+            } else {
+                mIsUsernameValid.setValue(false);
+            }
+            mUsernameEditionState.setValue(READY);
+        });
+
+        task.setOnFailed(event -> {
+            Throwable exception = event.getSource().getException();
+            if (SelectUsernameException.class.equals(exception.getClass())) {
+                mUsernameEditionErrorText.setValue("Could not check username validity");
+            } else if (BroadcastException.class.equals(exception.getClass())) {
+                mUsernameEditionErrorText.setValue("Could not communicate your new username to the other users");
+            } else {
+                mUsernameEditionErrorText.setValue("An unexpected error occurred");
+                exception.printStackTrace();
+            }
+            mUsernameEditionState.setValue(ERROR);
+        });
+
+        new Thread(task).start();
     }
 }
 

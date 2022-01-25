@@ -94,12 +94,13 @@ public class MessagingViewModel {
     }
 
     private void sendMessage(String message) {
+        if (message.trim().isBlank()) return;
         if (mSelectedUser.getValue() != null) {
             mSate.setValue(ViewState.LOADING);
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() throws Exception {
-                    mSendMessageUseCase.execute(message, mSelectedUser.getValue());
+                    mSendMessageUseCase.execute(message.trim(), mSelectedUser.getValue());
                     return null;
                 }
             };

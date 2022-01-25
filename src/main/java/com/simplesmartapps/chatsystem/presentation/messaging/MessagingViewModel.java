@@ -129,7 +129,6 @@ public class MessagingViewModel {
         }
     }
 
-
     public void onValidateUsernameButtonClicked(String usernameCandidate) {
         checkUsernameValidity(usernameCandidate);
     }
@@ -177,6 +176,10 @@ public class MessagingViewModel {
         });
 
         new Thread(task).start();
+    }
+
+    public void onUsernameTextFieldEscapeKeyPressed() {
+        mUsernameEditionState.setValue(READY);
     }
 }
 

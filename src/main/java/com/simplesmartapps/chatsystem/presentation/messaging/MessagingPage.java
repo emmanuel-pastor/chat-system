@@ -186,6 +186,8 @@ public class MessagingPage implements Initializable {
         usernameTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 mViewModel.onUsernameTextFieldEnterKeyPressed(usernameTextField.getText());
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                mViewModel.onUsernameTextFieldEscapeKeyPressed();
             }
         });
     }

@@ -27,21 +27,13 @@
             <StackPane GridPane.columnIndex="1" GridPane.halignment="LEFT">
                 <Button fx:id="editUsernameButton" mnemonicParsing="false" StackPane.alignment="CENTER_LEFT">
                     <graphic>
-                        <FontIcon iconLiteral="fa-pencil">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </FontIcon>
+                        <FontIcon iconLiteral="fa-pencil" iconSize="18"/>
                     </graphic>
                 </Button>
                 <Button fx:id="validateUsernameButton" mnemonicParsing="false" visible="false"
                         StackPane.alignment="CENTER_LEFT">
                     <graphic>
-                        <FontIcon iconColor="#1f9a4e" iconLiteral="fa-check">
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </FontIcon>
+                        <FontIcon iconColor="#1f9a4e" iconLiteral="fa-check" iconSize="18"/>
                     </graphic>
                 </Button>
                 <ProgressIndicator fx:id="usernameValidationLoadingIndicator" maxHeight="25.0" maxWidth="25.0"
@@ -54,7 +46,11 @@
                 </font>
             </FontIcon>
             <StackPane alignment="CENTER_LEFT">
-                <Label fx:id="usernameLabel"/>
+                <Label fx:id="usernameLabel">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
                 <TextField fx:id="usernameTextField" maxWidth="200.0" visible="false"/>
             </StackPane>
             <Button fx:id="disconnectionButton" mnemonicParsing="false" style="-fx-background-color: #d93939;"

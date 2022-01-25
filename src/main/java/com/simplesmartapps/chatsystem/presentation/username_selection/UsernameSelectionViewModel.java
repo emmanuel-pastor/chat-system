@@ -11,6 +11,7 @@ import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.concurrent.Task;
 
+import static com.simplesmartapps.chatsystem.Constants.USERNAME_MAX_LENGTH;
 import static com.simplesmartapps.chatsystem.presentation.username_selection.UsernameSelectionViewModel.ValidityState.*;
 import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
 
@@ -38,6 +39,10 @@ public class UsernameSelectionViewModel {
         mState.setValue(LOADING);
         if (username.isBlank()) {
             mErrorText.setValue("Username should not be empty");
+            mState.setValue(ERROR);
+            return;
+        } else if (username.length() > USERNAME_MAX_LENGTH) {
+            mErrorText.setValue("Username should not be longer than " + USERNAME_MAX_LENGTH + " characters");
             mState.setValue(ERROR);
             return;
         }

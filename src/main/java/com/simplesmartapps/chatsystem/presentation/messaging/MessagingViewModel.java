@@ -18,6 +18,7 @@ import javafx.concurrent.Task;
 
 import java.sql.SQLException;
 
+import static com.simplesmartapps.chatsystem.Constants.USERNAME_MAX_LENGTH;
 import static com.simplesmartapps.chatsystem.presentation.util.ViewState.*;
 
 public class MessagingViewModel {
@@ -141,6 +142,10 @@ public class MessagingViewModel {
         mUsernameEditionState.setValue(LOADING);
         if (username.isBlank()) {
             mUsernameEditionErrorText.setValue("Username should not be empty");
+            mUsernameEditionState.setValue(ERROR);
+            return;
+        } else if (username.length() > USERNAME_MAX_LENGTH) {
+            mUsernameEditionErrorText.setValue("Username should not be longer than " + USERNAME_MAX_LENGTH + " characters");
             mUsernameEditionState.setValue(ERROR);
             return;
         }

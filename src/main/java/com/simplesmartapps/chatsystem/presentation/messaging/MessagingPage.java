@@ -39,7 +39,7 @@ public class MessagingPage implements Initializable {
     private Text selectedUserInitialTextView;
 
     @FXML
-    private Text selectedUserUsernameTextView;
+    private Label selectedUserUsernameLabel;
 
     @FXML
     private ListView<Message> messagesListView;
@@ -94,7 +94,7 @@ public class MessagingPage implements Initializable {
                 sendMessageLoadingIndicator.setVisible(true);
                 if (messageTextField.isVisible()) {
                     // To avoid the focus going back to the users list view thus provoking some weird visual effect
-                    selectedUserUsernameTextView.requestFocus();
+                    selectedUserUsernameLabel.requestFocus();
                 }
             } else if (newState == ViewState.READY) {
                 sendMessageLoadingIndicator.setVisible(false);
@@ -125,7 +125,7 @@ public class MessagingPage implements Initializable {
 
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
-                selectedUserUsernameTextView.setText(selectedUser.username());
+                selectedUserUsernameLabel.setText(selectedUser.username());
                 selectedUserInitialTextView.setText(selectedUser.username().substring(0, 1).toUpperCase());
                 if (selectedUser.isConnected()) {
                     selectedUserStatusCircle.setFill(Color.web("#38b22b"));

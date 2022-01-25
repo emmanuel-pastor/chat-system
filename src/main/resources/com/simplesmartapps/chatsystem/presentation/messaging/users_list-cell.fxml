@@ -28,12 +28,12 @@
             <Font size="18.0"/>
         </font>
     </Text>
-    <Text fx:id="usernameTextView" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
-          GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+    <Label fx:id="usernameLabel" text="Manu" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+           GridPane.valignment="CENTER">
         <font>
-            <Font size="15.0"/>
+            <Font name="System Bold" size="15.0"/>
         </font>
-    </Text>
+    </Label>
     <Label fx:id="lastMessageLabel"
            text="Voici le dernier message envoyé, il ce peut que ce message soit un pe long et qu'il faille le couper"
            GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1"/>

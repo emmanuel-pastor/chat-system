@@ -22,7 +22,7 @@ public class UsersListCell extends ListCell<UserWithLatestMessage> {
     private Text usernameInitialTextView;
 
     @FXML
-    private Text usernameTextView;
+    private Label usernameLabel;
 
     @FXML
     private Label lastMessageLabel;
@@ -55,7 +55,7 @@ public class UsersListCell extends ListCell<UserWithLatestMessage> {
                 statusCircle.setFill(Color.DARKGRAY);
             }
             usernameInitialTextView.setText(userWithLatestMessage.user().username().substring(0, 1).toUpperCase());
-            usernameTextView.setText(userWithLatestMessage.user().username());
+            usernameLabel.setText(userWithLatestMessage.user().username());
             if (userWithLatestMessage.latestMessage() != null) {
                 if (userWithLatestMessage.latestMessage().isIncoming()) {
                     lastMessageLabel.setText(userWithLatestMessage.user().username() + ": " + userWithLatestMessage.latestMessage().content());

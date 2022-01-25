@@ -13,9 +13,9 @@
     <VBox alignment="CENTER">
         <GridPane hgap="20.0" vgap="10.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
                 <ColumnConstraints minWidth="10.0"/>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
@@ -31,7 +31,7 @@
                         <FontIcon iconLiteral="fa-pencil" iconSize="18"/>
                     </graphic>
                 </Button>
-                <Button fx:id="validateUsernameButton" text="Submit" mnemonicParsing="false" visible="false"
+                <Button fx:id="validateUsernameButton" mnemonicParsing="false" text="Submit" visible="false"
                         StackPane.alignment="CENTER_LEFT"/>
                 <ProgressIndicator fx:id="usernameValidationLoadingIndicator" maxHeight="25.0" maxWidth="25.0"
                                    visible="false"/>
@@ -75,7 +75,7 @@
                 <Insets bottom="10.0" left="25.0" right="25.0" top="10.0"/>
             </padding>
             <cursor>
-                <Cursor fx:constant="HAND"/>
+                <Cursor fx:constant="DEFAULT"/>
             </cursor>
             <Circle fx:id="selectedUserStatusCircle" fill="#38b22b" radius="24.0" stroke="BLACK" strokeType="INSIDE"
                     GridPane.rowSpan="2147483647"/>
@@ -85,12 +85,12 @@
                     <Font size="18.0"/>
                 </font>
             </Text>
-            <Text fx:id="selectedUserUsernameTextView" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
-                  GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+            <Label fx:id="selectedUserUsernameLabel" GridPane.columnIndex="1" GridPane.halignment="LEFT"
+                   GridPane.valignment="CENTER">
                 <font>
-                    <Font size="15.0"/>
+                    <Font name="System Bold" size="15.0"/>
                 </font>
-            </Text>
+            </Label>
         </GridPane>
         <ListView fx:id="messagesListView" VBox.vgrow="ALWAYS"/>
         <GridPane>

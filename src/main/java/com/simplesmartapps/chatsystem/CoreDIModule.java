@@ -19,6 +19,8 @@ public class CoreDIModule extends AbstractModule {
     protected void configure() {
         bind(NetworkController.class).toInstance(NetworkControllerImpl.getInstance());
         bind(RuntimeDataStore.class).toInstance(RuntimeDataStoreImpl.getInstance());
+        bind(TCPServer.class).in(Singleton.class);
+        bind(UDPServer.class).in(Singleton.class);
         bind(DatabaseController.class).in(Singleton.class);
         bind(MessageDao.class).in(Singleton.class);
     }

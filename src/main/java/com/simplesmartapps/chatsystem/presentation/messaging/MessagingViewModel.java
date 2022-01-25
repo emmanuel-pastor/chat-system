@@ -139,6 +139,10 @@ public class MessagingViewModel {
     }
 
     private void checkUsernameValidity(String username) {
+        if (username.equals(mUsername.getValue())) {
+            mUsernameEditionState.setValue(READY);
+            return;
+        }
         mUsernameEditionState.setValue(LOADING);
         if (username.isBlank()) {
             mUsernameEditionErrorText.setValue("Username should not be empty");

@@ -9,8 +9,9 @@ import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
@@ -29,16 +30,17 @@ public class SelectUsernameUseCase {
     public boolean execute(String usernameCandidate) throws SelectUsernameException {
         try {
             List<BroadcastResponse> responseList = mNetworkController.sendBroadcastWithMultipleResponses(createUsernameValidationRequest(), UDP_SERVER_INPUT_PORT, USERNAME_CHECK_TIMEOUT);
-            HashSet<User> newUsersSet = (HashSet<User>) responseList.stream().map(this::userFromBroadcastResponse).filter(user -> !user.macAddress().equals(mNetworkController.getMacAddress())).collect(Collectors.toSet());
-            boolean isUsernameValid = newUsersSet.stream().noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
+            Map<String, User> newUsers = responseList.stream().map(this::userFromBroadcastResponse).filter(user -> !user.macAddress().equals(mNetworkController.getMacAddress())).collect(Collectors.toMap(User::macAddress, Function.identity()));
+            boolean isUsernameValid = responseList.stream().map(this::userFromBroadcastResponse).filter(user -> !user.macAddress().equals(mNetworkController.getMacAddress())).noneMatch(connectedUser -> connectedUser.username().equals(usernameCandidate));
 
             if (isUsernameValid) {
                 mRuntimeDataStore.writeUsername(usernameCandidate);
-                mRuntimeDataStore.addAllUsers(newUsersSet);
+                mRuntimeDataStore.addAllUsers(newUsers);
             }
 
             return isUsernameValid;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SelectUsernameException("A network error occurred while trying to validate the username", e);
         }
     }

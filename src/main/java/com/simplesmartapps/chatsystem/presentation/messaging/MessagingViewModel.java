@@ -11,9 +11,9 @@ import com.simplesmartapps.chatsystem.domain.exception.SendMessageException;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class MessagingViewModel {
     private final ListUserMessagesUseCase mListUserMessagesUseCase;
     private final ListLatestMessagesUseCase mListLatestMessagesUseCase;
     private final ChangeUsernameUseCase mChangeUsernameUseCase;
-    public ObservableSet<User> mUsersSet;
+    public ObservableMap<String, User> mKnownUsers;
     public ObservableList<Message> mLatestMessages = FXCollections.observableArrayList();
     public ObservableProperty<User> mSelectedUser = new ObservableProperty<>(null);
     public ObservableProperty<ObservableList<Message>> mMessages = new ObservableProperty<>(null);
@@ -42,10 +42,10 @@ public class MessagingViewModel {
         this.mListUserMessagesUseCase = listUserMessagesUseCase;
         this.mListLatestMessagesUseCase = listLatestMessagesUseCase;
         this.mChangeUsernameUseCase = changeUsernameUseCase;
-        mUsersSet = listUsersUseCase.execute();
+        mKnownUsers = listUsersUseCase.execute();
         loadLatestMessages();
-        mUsersSet.addListener((SetChangeListener<User>) change -> {
-            User userAdded = change.getElementAdded();
+        mKnownUsers.addListener((MapChangeListener<? super String, ? super User>) change -> {
+            User userAdded = change.getValueAdded();
             if (mSelectedUser.getValue() != null && userAdded != null && mSelectedUser.getValue().macAddress().equals(userAdded.macAddress())) {
                 mSelectedUser.setValue(userAdded);
             }

@@ -1,20 +1,19 @@
 package com.simplesmartapps.chatsystem.data.local;
 
 import com.simplesmartapps.chatsystem.data.local.model.User;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableMap;
 
 import java.net.Socket;
 import java.util.Map;
-import java.util.Set;
 
 public interface RuntimeDataStore {
     String readUsername();
 
     void writeUsername(String newUsername);
 
-    ObservableSet<User> readUsersSet();
+    ObservableMap<String, User> readKnownUsers();
 
-    void addAllUsers(Set<User> newSet);
+    void addAllUsers(Map<String, User> newUsers);
 
     void setUserConnectionStatus(String macAddress, boolean isConnected);
 

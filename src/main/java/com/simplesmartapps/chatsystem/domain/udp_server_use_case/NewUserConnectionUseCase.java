@@ -5,8 +5,7 @@ import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Collections;
 
 public class NewUserConnectionUseCase {
     private final RuntimeDataStore mRuntimeDataStore;
@@ -20,7 +19,7 @@ public class NewUserConnectionUseCase {
 
     public void execute(User newUser) {
         if (!mNetworkController.getMacAddress().equals(newUser.macAddress())) {
-            mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
+            mRuntimeDataStore.addAllUsers(Collections.singletonMap(newUser.macAddress(), newUser));
         }
     }
 }

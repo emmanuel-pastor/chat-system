@@ -5,10 +5,8 @@ import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewUsernameUseCase {
     final NetworkController mNetworkController;
@@ -22,10 +20,10 @@ public class NewUsernameUseCase {
 
     public void execute(User modifiedUser) {
         if (!modifiedUser.macAddress().equals(mNetworkController.getMacAddress())) {
-            Set<User> oldUsers = mRuntimeDataStore.readUsersSet();
-            List<User> modifiedUsersList = oldUsers.stream().filter(user -> !user.macAddress().equals(modifiedUser.macAddress())).collect(Collectors.toList());
-            modifiedUsersList.add(modifiedUser);
-            mRuntimeDataStore.addAllUsers(new HashSet<>(modifiedUsersList));
+            Map<String, User> knownUsers = mRuntimeDataStore.readKnownUsers();
+            Map<String, User> updatedMap = new HashMap<>(knownUsers);
+            updatedMap.put(modifiedUser.macAddress(), modifiedUser);
+            mRuntimeDataStore.addAllUsers(updatedMap);
         }
     }
 }

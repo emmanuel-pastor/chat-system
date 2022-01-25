@@ -3,7 +3,7 @@ package com.simplesmartapps.chatsystem.domain;
 import com.google.inject.Inject;
 import com.simplesmartapps.chatsystem.data.local.RuntimeDataStore;
 import com.simplesmartapps.chatsystem.data.local.model.User;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableMap;
 
 public class ListUsersUseCase {
     private final RuntimeDataStore runtimeDataStore;
@@ -13,7 +13,7 @@ public class ListUsersUseCase {
         this.runtimeDataStore = runtimeDataStore;
     }
 
-    public ObservableSet<User> execute() {
-        return runtimeDataStore.readUsersSet();
+    public ObservableMap<String, User> execute() {
+        return runtimeDataStore.readKnownUsers();
     }
 }

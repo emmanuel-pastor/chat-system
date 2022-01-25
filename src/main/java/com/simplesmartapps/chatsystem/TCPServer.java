@@ -14,10 +14,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Collections;
+import java.util.Map;
 
 import static com.simplesmartapps.chatsystem.Constants.TCP_SERVER_INPUT_PORT;
 
@@ -72,17 +70,16 @@ public class TCPServer {
     }
 
     private void updateUsersSetIfNeeded(String userId, String username, InetAddress ipAddress) {
-        Set<User> usersSet = mRuntimeDataStore.readUsersSet();
-        Optional<User> optionalUserInSet = usersSet.stream().filter(user -> user.macAddress().equals(userId)).findFirst();
+        Map<String, User> knownUsers = mRuntimeDataStore.readKnownUsers();
+        User existingUser = knownUsers.get(userId);
 
-        if (optionalUserInSet.isPresent()) {
-            User existingUser = optionalUserInSet.get();
+        if (existingUser != null) {
             if (!existingUser.isConnected()) {
                 mRuntimeDataStore.setUserConnectionStatus(userId, true);
             }
         } else {
             User newUser = new User(userId, username, ipAddress, true);
-            mRuntimeDataStore.addAllUsers(new HashSet<>(List.of(newUser)));
+            mRuntimeDataStore.addAllUsers(Collections.singletonMap(userId, newUser));
         }
     }
 

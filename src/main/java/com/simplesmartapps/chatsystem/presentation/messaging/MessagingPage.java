@@ -21,10 +21,7 @@ import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class MessagingPage implements Initializable {
     private final MessagingViewModel mViewModel;
@@ -118,8 +115,10 @@ public class MessagingPage implements Initializable {
         setUpUsersListView();
         setUpMessagesListView();
 
-        mViewModel.mUsersSet.addListener((SetChangeListener<? super User>) change -> updateUsersListView(change.getSet(), mViewModel.mLatestMessages));
-        mViewModel.mLatestMessages.addListener((ListChangeListener<? super Message>) change -> updateUsersListView(mViewModel.mUsersSet, change.getList()));
+        mViewModel.mKnownUsers.addListener((MapChangeListener<? super String, ? super User>) change -> {
+            updateUsersListView(change.getMap(), mViewModel.mLatestMessages);
+        });
+        mViewModel.mLatestMessages.addListener((ListChangeListener<? super Message>) change -> updateUsersListView(mViewModel.mKnownUsers, change.getList()));
 
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
@@ -201,18 +200,22 @@ public class MessagingPage implements Initializable {
                 mViewModel.onListItemClicked(change.getAddedSubList().get(0).user());
             }
         });
-        updateUsersListView(mViewModel.mUsersSet, mViewModel.mLatestMessages);
+        updateUsersListView(mViewModel.mKnownUsers, mViewModel.mLatestMessages);
     }
 
-    private void updateUsersListView(ObservableSet<? extends User> usersSet, ObservableList<? extends Message> latestMessages) {
-        List<UserWithLatestMessage> userWithLatestMessages = usersSet.stream()
-                .map(user -> new UserWithLatestMessage(
-                        user,
-                        latestMessages.stream()
-                                .filter(message -> message.remoteUserId().equals(user.macAddress())).findFirst().orElse(null),
-                        true)
-                ).collect(Collectors.toList());
-        usersListView.setItems(FXCollections.observableList(new ArrayList<>(userWithLatestMessages)));
+    private void updateUsersListView(ObservableMap<? extends String, ? extends User> knownUsers, ObservableList<? extends Message> latestMessages) {
+        ObservableList<UserWithLatestMessage> usersWithLatestMessages = FXCollections.observableArrayList();
+        knownUsers.forEach((id, user) -> {
+            usersWithLatestMessages.add(
+                    new UserWithLatestMessage(
+                            user,
+                            latestMessages.stream()
+                                    .filter(message -> message.remoteUserId().equals(user.macAddress())).findFirst().orElse(null),
+                            true
+                    )
+            );
+        });
+        usersListView.setItems(FXCollections.observableList(usersWithLatestMessages));
     }
 
     private VBox emptyUsersListPlaceholder() {

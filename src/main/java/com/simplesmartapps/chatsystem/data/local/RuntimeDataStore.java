@@ -22,4 +22,6 @@ public interface RuntimeDataStore {
     void addOpenSocket(String key, Socket newSocket);
 
     void removeOpenSocket(String key);
+
+    void clearOpenSockets();
 }

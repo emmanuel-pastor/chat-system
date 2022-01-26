@@ -118,10 +118,8 @@ public class MessagingPage implements Initializable {
         setUpUsersListView();
         setUpMessagesListView();
 
-        mViewModel.mKnownUsers.addListener((MapChangeListener<? super String, ? super User>) change -> {
-            updateUsersListView(change.getMap(), mViewModel.mLatestMessages);
-        });
-        mViewModel.mLatestMessages.addListener((ListChangeListener<? super Message>) change -> updateUsersListView(mViewModel.mKnownUsers, change.getList()));
+        mViewModel.mKnownUsers.addListener(knownUsersListener());
+        mViewModel.mLatestMessages.addListener(latestMessagesListener());
 
         mViewModel.mSelectedUser.observe(this, selectedUser -> {
             if (selectedUser != null) {
@@ -201,6 +199,21 @@ public class MessagingPage implements Initializable {
                 mViewModel.onUsernameTextFieldEscapeKeyPressed();
             }
         });
+
+        disconnectionButton.setOnMouseClicked(event -> {
+            cleanUp();
+            mViewModel.onDisconnectionButtonClicked();
+        });
+    }
+
+    private ListChangeListener<? super Message> latestMessagesListener() {
+        return change -> updateUsersListView(mViewModel.mKnownUsers, change.getList());
+    }
+
+    private MapChangeListener<? super String, ? super User> knownUsersListener() {
+        return change -> {
+            updateUsersListView(change.getMap(), mViewModel.mLatestMessages);
+        };
     }
 
     private void setUpUsersListView() {
@@ -267,5 +280,10 @@ public class MessagingPage implements Initializable {
         vbox.setAlignment(Pos.CENTER);
 
         return vbox;
+    }
+
+    private void cleanUp() {
+        mViewModel.mKnownUsers.removeListener(knownUsersListener());
+        mViewModel.mLatestMessages.removeListener(latestMessagesListener());
     }
 }

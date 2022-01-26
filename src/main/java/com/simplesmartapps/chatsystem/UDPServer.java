@@ -5,6 +5,7 @@ import com.simplesmartapps.chatsystem.data.local.model.User;
 import com.simplesmartapps.chatsystem.data.remote.util.JsonUtil;
 import com.simplesmartapps.chatsystem.domain.udp_server_use_case.NewUserConnectionUseCase;
 import com.simplesmartapps.chatsystem.domain.udp_server_use_case.NewUsernameUseCase;
+import com.simplesmartapps.chatsystem.domain.udp_server_use_case.RemoteUserDisconnectionUseCase;
 import com.simplesmartapps.chatsystem.domain.udp_server_use_case.UsernameValidationUseCase;
 import org.json.JSONObject;
 
@@ -20,13 +21,15 @@ public class UDPServer {
     private final UsernameValidationUseCase mUsernameValidationUseCase;
     private final NewUserConnectionUseCase mNewUserConnectionUseCase;
     private final NewUsernameUseCase mNewUsernameUseCase;
+    private final RemoteUserDisconnectionUseCase mRemoteUserDisconnectionUseCase;
     DatagramSocket listeningSocket;
 
     @Inject
-    public UDPServer(UsernameValidationUseCase usernameValidationUseCase, NewUserConnectionUseCase newUserConnectionUseCase, NewUsernameUseCase newUsernameUseCase) {
+    public UDPServer(UsernameValidationUseCase usernameValidationUseCase, NewUserConnectionUseCase newUserConnectionUseCase, NewUsernameUseCase newUsernameUseCase, RemoteUserDisconnectionUseCase remoteUserDisconnectionUseCase) {
         this.mUsernameValidationUseCase = usernameValidationUseCase;
         this.mNewUserConnectionUseCase = newUserConnectionUseCase;
         this.mNewUsernameUseCase = newUsernameUseCase;
+        this.mRemoteUserDisconnectionUseCase = remoteUserDisconnectionUseCase;
     }
 
     public void start() throws SocketException {
@@ -63,10 +66,15 @@ public class UDPServer {
                                 mNewUsernameUseCase.execute(newUser);
                                 break;
                             }
+                            case "DISCONNECTION": {
+                                String macAddress = packetData.getString("mac_address");
+                                mRemoteUserDisconnectionUseCase.execute(macAddress);
+                                break;
+                            }
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // Intended to happen when stop function is called
                 }
             }
         };

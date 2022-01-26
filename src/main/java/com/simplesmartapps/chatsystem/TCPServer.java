@@ -58,7 +58,7 @@ public class TCPServer {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                // Intended to happen when stop function is called
             }
         });
         serverThread.start();

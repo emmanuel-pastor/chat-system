@@ -8,6 +8,8 @@ import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
 import com.simplesmartapps.chatsystem.domain.*;
 import com.simplesmartapps.chatsystem.domain.exception.SelectUsernameException;
 import com.simplesmartapps.chatsystem.domain.exception.SendMessageException;
+import com.simplesmartapps.chatsystem.presentation.network_listing.NetworkListingPage;
+import com.simplesmartapps.chatsystem.presentation.util.NavigationUtil;
 import com.simplesmartapps.chatsystem.presentation.util.ObservableProperty;
 import com.simplesmartapps.chatsystem.presentation.util.ViewState;
 import javafx.collections.FXCollections;
@@ -26,6 +28,7 @@ public class MessagingViewModel {
     private final ListUserMessagesUseCase mListUserMessagesUseCase;
     private final ListLatestMessagesUseCase mListLatestMessagesUseCase;
     private final ChangeUsernameUseCase mChangeUsernameUseCase;
+    private final DisconnectionUseCase mDisconnectionUseCase;
     public ObservableMap<String, User> mKnownUsers;
     public ObservableList<Message> mLatestMessages = FXCollections.observableArrayList();
     public ObservableProperty<User> mSelectedUser = new ObservableProperty<>(null);
@@ -38,20 +41,25 @@ public class MessagingViewModel {
     public ObservableProperty<String> mUsernameEditionErrorText = new ObservableProperty<>("");
 
     @Inject
-    public MessagingViewModel(RuntimeDataStore runtimeDataStore, SendMessageUseCase mSendMessageUseCase, ListUserMessagesUseCase listUserMessagesUseCase, ListLatestMessagesUseCase listLatestMessagesUseCase, ChangeUsernameUseCase changeUsernameUseCase, ListUsersUseCase listUsersUseCase) {
+    public MessagingViewModel(RuntimeDataStore runtimeDataStore, SendMessageUseCase mSendMessageUseCase, ListUserMessagesUseCase listUserMessagesUseCase, ListLatestMessagesUseCase listLatestMessagesUseCase, ChangeUsernameUseCase changeUsernameUseCase, DisconnectionUseCase disconnectionUseCase, ListUsersUseCase listUsersUseCase) {
         this.mSendMessageUseCase = mSendMessageUseCase;
         this.mListUserMessagesUseCase = listUserMessagesUseCase;
         this.mListLatestMessagesUseCase = listLatestMessagesUseCase;
         this.mChangeUsernameUseCase = changeUsernameUseCase;
+        this.mDisconnectionUseCase = disconnectionUseCase;
         mKnownUsers = listUsersUseCase.execute();
         loadLatestMessages();
-        mKnownUsers.addListener((MapChangeListener<? super String, ? super User>) change -> {
+        mKnownUsers.addListener(knownUsersListener());
+        mUsername.setValue(runtimeDataStore.readUsername());
+    }
+
+    private MapChangeListener<? super String, ? super User> knownUsersListener() {
+        return change -> {
             User userAdded = change.getValueAdded();
             if (mSelectedUser.getValue() != null && userAdded != null && mSelectedUser.getValue().macAddress().equals(userAdded.macAddress())) {
                 mSelectedUser.setValue(userAdded);
             }
-        });
-        mUsername.setValue(runtimeDataStore.readUsername());
+        };
     }
 
     private void loadLatestMessages() {
@@ -189,6 +197,24 @@ public class MessagingViewModel {
 
     public void onUsernameTextFieldEscapeKeyPressed() {
         mUsernameEditionState.setValue(READY);
+    }
+
+    public void onDisconnectionButtonClicked() {
+        mDisconnectionUseCase.execute();
+        cleanUp();
+        NavigationUtil.navigateTo(NetworkListingPage.class);
+    }
+
+    private void cleanUp() {
+        mKnownUsers.removeListener(knownUsersListener());
+        mSelectedUser.clearObservers();
+        mMessages.clearObservers();
+        mUsername.clearObservers();
+        mIsUsernameValid.clearObservers();
+        mMessagingSate.clearObservers();
+        mUsernameEditionState.clearObservers();
+        mMessagingErrorText.clearObservers();
+        mUsernameEditionErrorText.clearObservers();
     }
 }
 

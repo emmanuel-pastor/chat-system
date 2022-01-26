@@ -32,4 +32,8 @@ public class ObservableProperty<T> {
     public void removeObserver(Object observer) {
         mObservers.remove(observer);
     }
+
+    public void clearObservers() {
+        mObservers.clear();
+    }
 }

@@ -11,7 +11,7 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.simplesmartapps.chatsystem.presentation.messaging.MessagingPage">
     <VBox alignment="CENTER">
-        <GridPane hgap="20.0" vgap="10.0">
+        <GridPane hgap="20.0" vgap="20.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
                 <ColumnConstraints minWidth="10.0"/>
@@ -23,9 +23,9 @@
                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <padding>
-                <Insets bottom="15.0" left="25.0" right="25.0" top="15.0"/>
+                <Insets bottom="10.0" left="25.0" right="25.0" top="10.0"/>
             </padding>
-            <StackPane GridPane.columnIndex="1" GridPane.halignment="LEFT">
+            <StackPane GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                 <Button fx:id="editUsernameButton" mnemonicParsing="false" StackPane.alignment="CENTER_LEFT">
                     <graphic>
                         <FontIcon iconLiteral="fa-pencil" iconSize="18"/>
@@ -36,7 +36,7 @@
                 <ProgressIndicator fx:id="usernameValidationLoadingIndicator" maxHeight="25.0" maxWidth="25.0"
                                    visible="false"/>
             </StackPane>
-            <StackPane alignment="CENTER_LEFT">
+            <StackPane alignment="CENTER_LEFT" GridPane.rowIndex="1">
                 <Label fx:id="usernameLabel">
                     <font>
                         <Font name="System Bold" size="18.0"/>
@@ -45,7 +45,7 @@
                 <TextField fx:id="usernameTextField" maxWidth="200.0" visible="false"/>
             </StackPane>
             <Button fx:id="disconnectionButton" mnemonicParsing="false" style="-fx-background-color: #d93939;"
-                    text="Disconnect" textFill="WHITE" GridPane.rowIndex="2">
+                    text="Disconnect" textFill="WHITE">
                 <padding>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                 </padding>
@@ -53,7 +53,7 @@
                     <Insets top="10.0"/>
                 </GridPane.margin>
             </Button>
-            <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
+            <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
                 <FontIcon fx:id="editUsernameErrorIcon" iconColor="#d93939" iconLiteral="fa-times-circle" iconSize="28"
                           visible="false"/>
                 <Label fx:id="editUsernameErrorLabel" textFill="#d93939"/>

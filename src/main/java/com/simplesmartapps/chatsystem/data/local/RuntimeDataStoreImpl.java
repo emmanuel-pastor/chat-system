@@ -73,4 +73,9 @@ public class RuntimeDataStoreImpl implements RuntimeDataStore {
     public void removeOpenSocket(String key) {
         openedSockets.remove(key);
     }
+
+    @Override
+    public void clearOpenSockets() {
+        openedSockets.clear();
+    }
 }

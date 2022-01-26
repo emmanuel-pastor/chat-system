@@ -38,9 +38,9 @@ public class NetworkListingViewModel {
     }
 
     private void cleanupObservers() {
-        mSate.removeObserver(this);
-        mAvailableNetworksList.removeObserver(this);
-        mErrorText.removeObserver(this);
+        mSate.clearObservers();
+        mAvailableNetworksList.clearObservers();
+        mErrorText.clearObservers();
     }
 
     public void onRefreshButtonClicked() {

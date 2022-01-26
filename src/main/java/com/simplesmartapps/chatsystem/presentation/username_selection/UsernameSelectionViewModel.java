@@ -87,9 +87,9 @@ public class UsernameSelectionViewModel {
     }
 
     private void cleanup() {
-        mState.removeObserver(this);
-        mIsValid.removeObserver(this);
-        mErrorText.removeObserver(this);
+        mState.clearObservers();
+        mIsValid.clearObservers();
+        mErrorText.clearObservers();
     }
 
     enum ValidityState {

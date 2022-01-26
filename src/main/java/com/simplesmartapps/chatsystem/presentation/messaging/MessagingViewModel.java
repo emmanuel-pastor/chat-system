@@ -173,10 +173,12 @@ public class MessagingViewModel {
             if (isValid) {
                 mIsUsernameValid.setValue(true);
                 mUsername.setValue(username);
+                mUsernameEditionState.setValue(READY);
             } else {
                 mIsUsernameValid.setValue(false);
+                mUsernameEditionErrorText.setValue("This username is already taken");
+                mUsernameEditionState.setValue(ERROR);
             }
-            mUsernameEditionState.setValue(READY);
         });
 
         task.setOnFailed(event -> {

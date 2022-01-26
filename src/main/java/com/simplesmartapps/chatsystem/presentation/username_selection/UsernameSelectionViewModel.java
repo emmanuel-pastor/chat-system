@@ -62,6 +62,8 @@ public class UsernameSelectionViewModel {
                 NavigationUtil.navigateTo(MessagingPage.class);
             } else {
                 mIsValid.setValue(INVALID);
+                mErrorText.setValue("This username is already taken");
+                mState.setValue(ERROR);
             }
         });
 

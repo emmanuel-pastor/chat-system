@@ -63,7 +63,6 @@ public class UsernameSelectionPage implements Initializable {
                 loadingIndicator.setVisible(false);
                 submitButton.setVisible(true);
                 usernameTextField.setDisable(false);
-                validationIcon.setVisible(false);
                 errorTextView.setVisible(true);
             }
         });

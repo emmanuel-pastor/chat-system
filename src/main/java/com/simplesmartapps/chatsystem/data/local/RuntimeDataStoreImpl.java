@@ -48,15 +48,22 @@ public class RuntimeDataStoreImpl implements RuntimeDataStore {
     public void setUserConnectionStatus(String macAddress, boolean isConnected) {
         Platform.runLater(() -> {
             User userToModify = knownUsers.get(macAddress);
-            knownUsers.put(
-                    macAddress,
-                    new User(
-                            userToModify.macAddress(),
-                            userToModify.username(),
-                            userToModify.ipAddress(),
-                            isConnected)
-            );
+            if (userToModify != null) {
+                knownUsers.put(
+                        macAddress,
+                        new User(
+                                userToModify.macAddress(),
+                                userToModify.username(),
+                                userToModify.ipAddress(),
+                                isConnected)
+                );
+            }
         });
+    }
+
+    @Override
+    public void clearKnownUsers() {
+        Platform.runLater(knownUsers::clear);
     }
 
     @Override

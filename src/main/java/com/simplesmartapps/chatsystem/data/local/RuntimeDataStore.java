@@ -17,6 +17,8 @@ public interface RuntimeDataStore {
 
     void setUserConnectionStatus(String macAddress, boolean isConnected);
 
+    void clearKnownUsers();
+
     Map<String, Socket> readOpenedSockets();
 
     void addOpenSocket(String key, Socket newSocket);

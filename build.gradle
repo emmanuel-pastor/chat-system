@@ -28,7 +28,7 @@ application {
 jlink {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
     launcher {
-        name = 'Chat System'
+        name = 'chatsystem'
         imageName = "chatsystem"
         mainClass = "com.simplesmartapps.chatsystem.ChatSystemApplication"
     }
@@ -41,8 +41,6 @@ jlink {
         }
     }
 }
-
-run {}
 
 javafx {
     version = '17.0.0.1'

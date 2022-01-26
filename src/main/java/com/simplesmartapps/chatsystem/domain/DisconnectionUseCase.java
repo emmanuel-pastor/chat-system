@@ -8,6 +8,8 @@ import com.simplesmartapps.chatsystem.data.remote.NetworkController;
 import com.simplesmartapps.chatsystem.data.remote.exception.BroadcastException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import static com.simplesmartapps.chatsystem.Constants.UDP_SERVER_INPUT_PORT;
 
 public class DisconnectionUseCase {
@@ -27,6 +29,14 @@ public class DisconnectionUseCase {
     public void execute() {
         try {
             mNetworkController.sendBroadcast(createDisconnectionRequest(), UDP_SERVER_INPUT_PORT);
+            mRuntimeDataStore.clearKnownUsers();
+            mRuntimeDataStore.readOpenedSockets().forEach((id, socket) -> {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
             mRuntimeDataStore.clearOpenSockets();
         } catch (BroadcastException e) {
             e.printStackTrace();

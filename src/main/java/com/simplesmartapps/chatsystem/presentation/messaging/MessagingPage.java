@@ -100,10 +100,12 @@ public class MessagingPage implements Initializable {
                 sendMessageLoadingIndicator.setVisible(false);
                 errorTextView.setVisible(false);
                 sendMessageButton.setVisible(true);
-                messageTextField.setDisable(false);
-                messageTextField.setText("");
-                if (messageTextField.isVisible()) {
-                    messageTextField.requestFocus();
+                if (mViewModel.mSelectedUser.getValue() != null && mViewModel.mSelectedUser.getValue().isConnected()) {
+                    messageTextField.setDisable(false);
+                    messageTextField.setText("");
+                    if (messageTextField.isVisible()) {
+                        messageTextField.requestFocus();
+                    }
                 }
             } else if (newState == ViewState.ERROR) {
                 sendMessageLoadingIndicator.setVisible(false);
